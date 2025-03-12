@@ -1,0 +1,9 @@
+classes/objetcs and what is saved in seperate files for them:
+    1. bookshop - filter, serach, data anlysis (all the counting and stuff)
+    2. books - name, author, what year
+    3. login info - name, password, maybe email (regex)
+
+
+All the file data pulling happens inthe bookshop class
+
+App just runs it (true or false)
