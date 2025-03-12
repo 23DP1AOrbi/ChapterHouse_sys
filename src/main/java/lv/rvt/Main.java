@@ -4,8 +4,13 @@ import java.util.*;
 
 public class Main 
 {
-    public static void main( String[] args )
+    public static void main( String[] args ) throws Exception
     {
-        // Make your first Hello World!
+        ArrayList<Book> books = Bookshop.allBooks();
+
+        for (Book book : books) {
+            System.out.println(book);
+        }
+
     }
 }

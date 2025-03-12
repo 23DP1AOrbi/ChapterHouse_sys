@@ -1,5 +1,8 @@
 package lv.rvt;
 
+import java.util.ArrayList;
+
+
 public class Book {
     private String name;
     private String author;
@@ -13,5 +16,7 @@ public class Book {
         this.ageCategory = ageCategory;
     }
 
-    
+    public String toString() {
+        return this.name + " " + this.author;
+    }
 }
