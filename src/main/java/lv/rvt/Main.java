@@ -6,11 +6,19 @@ public class Main
 {
     public static void main( String[] args ) throws Exception
     {
-        ArrayList<Book> books = Bookshop.allBooks();
+        // ArrayList<Book> books = Bookshop.allBooks();
 
-        for (Book book : books) {
-            System.out.println(book);
+        // for (Book book : books) {
+        //     System.out.println(book);
+        // }
+
+        // System.out.print(Bookshop.allUsers());
+        name
+
+        if (Bookshop.allUsers()) {
+            
         }
+
 
     }
 }

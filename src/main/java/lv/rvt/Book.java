@@ -1,6 +1,5 @@
 package lv.rvt;
 
-import java.util.ArrayList;
 
 
 public class Book {
@@ -18,5 +17,14 @@ public class Book {
 
     public String toString() {
         return this.name + " " + this.author;
+    }
+
+    // public void addBook(String bkName, String bkAtuhor, int releaseYear, String ageCategory) {
+    //     Book newBook = new Book(bkName, bkAtuhor, releaseYear, ageCategory);
+    //     // Bookshop.allBooks();
+    // }
+
+    public String toCSV() {
+        return this.name + ", " + this.author + ", " + this.year + ", " + this.ageCategory;
     }
 }
