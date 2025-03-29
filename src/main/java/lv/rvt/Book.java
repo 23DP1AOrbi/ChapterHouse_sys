@@ -7,16 +7,18 @@ public class Book {
     private String author;
     private int year;
     private String ageCategory;
+    private double price;
 
-    public Book(String name, String author, int year, String ageCategory) {
+    public Book(String name, String author, int year, String ageCategory, double price) {
         this.name = name;
         this.author = author;
         this.year = year;
         this.ageCategory = ageCategory;
+        this.price = price;
     }
 
     public String toString() {
-        return this.name + " " + this.author;
+        return this.name + " " + this.author + ": €" + this.price;
     }
 
     // public void addBook(String bkName, String bkAtuhor, int releaseYear, String ageCategory) {
@@ -25,6 +27,6 @@ public class Book {
     // }
 
     public String toCSV() {
-        return this.name + ", " + this.author + ", " + this.year + ", " + this.ageCategory;
+        return this.name + "," + this.author + "," + this.year + "," + this.ageCategory + "," + this.price;
     }
 }
