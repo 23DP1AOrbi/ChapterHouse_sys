@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Scanner;
-
 import lv.rvt.roles.User;
 import lv.rvt.tools.Helper;
 
@@ -49,6 +47,12 @@ public class Bookshop {
 
 
 
+    
+    }
+
+    
+
+
     // public void login() {
     //     Scanner scan = new Scanner(System.in);
 
@@ -59,4 +63,3 @@ public class Bookshop {
 
     
     
-}

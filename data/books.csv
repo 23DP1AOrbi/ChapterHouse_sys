@@ -1,34 +1,34 @@
-Name,Author,Year,Age category,Price (EUR)
-To Kill a Mockingbird,Harper Lee,1960,Adult,11.95
-Harry Potter and the Sorcerer's Stone,J.K. Rowling,1997,Young Adult,10.11
-The Great Gatsby,F. Scott Fitzgerald,1925,Adult,9.19
-The Hunger Games,Suzanne Collins,2008,Young Adult,11.03
-Charlotte's Web,E.B. White,1952,Children,7.35
-The Fault in Our Stars,John Green,2012,Young Adult,10.11
-Pride and Prejudice,Jane Austen,1813,Adult,8.27
-Where the Red Fern Grows,Wilson Rawls,1961,Children,7.35
-The Da Vinci Code,Dan Brown,2003,Adult,13.79
-Wonder,R.J. Palacio,2012,Middle Grade,9.19
-The Catcher in the Rye,J.D. Salinger,1951,Adult,10.11
-1984,George Orwell,1949,Adult,9.19
-The Chronicles of Narnia,C.S. Lewis,1950,Children,27.59
-Fahrenheit 451,Ray Bradbury,1953,Adult,11.03
-The Lord of the Rings,J.R.R. Tolkien,1954,Adult,23.91
-Little Women,Louisa May Alcott,1868,Young Adult,9.19
-The Picture of Dorian Gray,Oscar Wilde,1890,Adult,8.27
-Anne of Green Gables,L.M. Montgomery,1908,Children,7.35
-The Perks of Being a Wallflower,Stephen Chbosky,1999,Young Adult,10.11
-A Wrinkle in Time,Madeleine L'Engle,1962,Middle Grade,8.27
-Brave New World,Aldous Huxley,1932,Adult,10.11
-The Secret Garden,Frances Hodgson Burnett,1911,Children,7.35
-Circe,Madeline Miller,2018,Adult,13.79
-The Night Circus,Erin Morgenstern,2011,Adult,12.87
-Educated,Tara Westover,2018,Adult,14.71
-Homegoing,Yaa Gyasi,2016,Adult,13.79
-A Man Called Ove,Fredrik Backman,2012,Adult,12.87
-Little Fires Everywhere,Celeste Ng,2017,Adult,13.79
-The Hate U Give,Angie Thomas,2017,Young Adult,11.03
-An Ember in the Ashes,Sabaa Tahir,2015,Young Adult,11.95
-Children of Blood and Bone,Tomi Adeyemi,2018,Young Adult,11.95
-The Song of Achilles,Madeline Miller,2011,Adult,12.87
-The Cold War,John Lewis Gaddis,2005,Adult,10.53
+Name,Author,Year,Genre,Price (EUR)
+To Kill a Mockingbird,Harper Lee,1960,Historical Fiction,11.95
+Harry Potter and the Sorcerer's Stone,J.K. Rowling,1997,Fantasy,10.11
+The Great Gatsby,F. Scott Fitzgerald,1925,Classic,9.19
+The Hunger Games,Suzanne Collins,2008,Dystopian,11.03
+Charlotte's Web,E.B. White,1952,Children’s Fiction,7.35
+The Fault in Our Stars,John Green,2012,Romance,10.11
+Pride and Prejudice,Jane Austen,1813,Romance,8.27
+Where the Red Fern Grows,Wilson Rawls,1961,Children’s Fiction,7.35
+The Da Vinci Code,Dan Brown,2003,Thriller,13.79
+Wonder,R.J. Palacio,2012,Contemporary Fiction,9.19
+The Catcher in the Rye,J.D. Salinger,1951,Coming-of-Age,10.11
+1984,George Orwell,1949,Dystopian,9.19
+The Chronicles of Narnia,C.S. Lewis,1950,Fantasy,27.59
+Fahrenheit 451,Ray Bradbury,1953,Dystopian,11.03
+The Lord of the Rings,J.R.R. Tolkien,1954,Fantasy,23.91
+Little Women,Louisa May Alcott,1868,Classic,9.19
+The Picture of Dorian Gray,Oscar Wilde,1890,Gothic Fiction,8.27
+Anne of Green Gables,L.M. Montgomery,1908,Coming-of-Age,7.35
+The Perks of Being a Wallflower,Stephen Chbosky,1999,Coming-of-Age,10.11
+A Wrinkle in Time,Madeleine L'Engle,1962,Science Fiction,8.27
+Brave New World,Aldous Huxley,1932,Dystopian,10.11
+The Secret Garden,Frances Hodgson Burnett,1911,Children’s Fiction,7.35
+Circe,Madeline Miller,2018,Mythology,13.79
+The Night Circus,Erin Morgenstern,2011,Fantasy,12.87
+Educated,Tara Westover,2018,Memoir,14.71
+Homegoing,Yaa Gyasi,2016,Historical Fiction,13.79
+A Man Called Ove,Fredrik Backman,2012,Contemporary Fiction,12.87
+Little Fires Everywhere,Celeste Ng,2017,Contemporary Fiction,13.79
+The Hate U Give,Angie Thomas,2017,Contemporary Fiction,11.03
+An Ember in the Ashes,Sabaa Tahir,2015,Fantasy,11.95
+Children of Blood and Bone,Tomi Adeyemi,2018,Fantasy,11.95
+The Song of Achilles,Madeline Miller,2011,Mythology,12.87
+The Cold War,John Lewis Gaddis,2005,Non-Fiction,10.53
