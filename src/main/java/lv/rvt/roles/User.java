@@ -16,13 +16,7 @@ public class User {
 
     public void buyBook(){}
 
-    public void filter() {
-
-    }
-
-    public void search() {
-        
-    }
+    
 
 
 }

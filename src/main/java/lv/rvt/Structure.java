@@ -3,7 +3,7 @@ package lv.rvt;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Structure { // structure for the program
+public class Structure extends Bookshop{ // structure for the program
 
     public static void start() throws Exception{  // initial terminal
         Scanner scan = new Scanner(System.in);
@@ -30,6 +30,9 @@ public class Structure { // structure for the program
                 System.out.println();
                 Structure.instructions();
                 System.out.println();
+            }
+            else if (input.equalsIgnoreCase("search")) {
+                Bookshop.search();
             }
 
             else if (input.equalsIgnoreCase("add")) {
@@ -58,6 +61,7 @@ public class Structure { // structure for the program
     public static void instructions(){ // instruction output
         System.out.println("add - add a book to the list");
         System.out.println("help - show what the commands do");
+        System.out.println("search - search for a book or author");
         System.out.println("display - show list of books");
         System.out.println("stop - end program");
     }

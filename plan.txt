@@ -10,5 +10,5 @@ App just runs it (true or false)
 
 Assign roles to users:
     Admin - add, remove books, change price, create another admin
-    Regular user (shopper) - buy, statistics, search (, author/book name), filter (a-z, z-a, price range)
+    Regular user (shopper) - buy, statistics, search (author/book name), filter (a-z, z-a, price range (ascendeing or descending), genre, year range)
 

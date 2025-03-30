@@ -4,11 +4,14 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Scanner;
+
 import lv.rvt.roles.User;
 import lv.rvt.tools.Helper;
 
 
 public class Bookshop {
+
 
     public static ArrayList<Book> allBooks() throws Exception {
         ArrayList<Book> books = new ArrayList<>();
@@ -45,10 +48,41 @@ public class Bookshop {
         writer.close();
     }
 
+    public void filter() {
 
-
-    
     }
+
+    public static void search() throws Exception { // serach for name or author
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Search for book or author name: ");
+
+        String input = scan.nextLine();
+        System.out.println();
+
+        ArrayList<Book> searchBook = new ArrayList<>();
+        BufferedReader reader = Helper.getReader("books.csv");
+
+        String line;
+        reader.readLine();
+        while ((line = reader.readLine()) != null) {
+            String[] parts = line.split(",");
+
+            if (parts[0].toLowerCase().contains(input.toLowerCase()) || parts[1].toLowerCase().contains(input.toLowerCase())) {
+                Book book = new Book(parts[0], parts[1], Integer.valueOf(parts[2]), parts[3], Double.valueOf(parts[4]));
+                searchBook.add(book);
+            }
+        }
+
+        for (Book book2 : searchBook) {
+            System.out.println(book2);
+        }
+        System.out.println();
+
+                
+
+    }
+    
+}
 
     
 

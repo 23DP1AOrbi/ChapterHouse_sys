@@ -16,7 +16,7 @@ public class Book {
     }
 
     public String toString() {
-        return this.name + " " + this.author + ": €" + this.price;
+        return this.name + " by " + this.author + ": €" + this.price;
     }
 
     public String toCSV() {
