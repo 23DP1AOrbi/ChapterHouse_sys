@@ -36,9 +36,9 @@ public class Structure extends Bookshop{ // structure for the program
             }
 
             else if (input.equalsIgnoreCase("sort")) {
-                ArrayList<Book> books = Bookshop.allBooks();
+                // ArrayList<Book> books = Bookshop.allBooks();
 
-                Bookshop.sortBooks();
+                Bookshop.sortAllBooks();
                 
 
                 // for (Book book : sortedBooks) {

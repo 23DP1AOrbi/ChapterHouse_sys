@@ -22,4 +22,12 @@ public class Book {
     public String toCSV() {
         return this.name + "," + this.author + "," + this.year + "," + this.genre + "," + this.price;
     }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getAuthor() {
+        return this.author;
+    }
 }
