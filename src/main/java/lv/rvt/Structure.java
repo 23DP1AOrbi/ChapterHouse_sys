@@ -35,15 +35,12 @@ public class Structure { // structure for the program
             }
 
             else if (input.equalsIgnoreCase("sort")) {
-                // ArrayList<Book> books = Bookshop.allBooks();
+                ArrayList<Book> sortedBooks =  Bookshop.sortAllBooks();
 
-                Bookshop.sortAllBooks();
-                
-
-                // for (Book book : sortedBooks) {
-                //     System.out.println(book);
-                // }
-                // System.out.println();
+                for (Book book : sortedBooks) {
+                    System.out.println(book);
+                }
+                System.out.println();
             }
 
             else if (input.equalsIgnoreCase("add")) {

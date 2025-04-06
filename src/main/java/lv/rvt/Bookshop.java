@@ -49,10 +49,21 @@ public class Bookshop {
 
     public static void search() throws Exception { // serach for name or author
         Scanner scan = new Scanner(System.in);
-        System.out.println("Search for book or author name: ");
+        System.out.println("Search by book name [1], author [2] or both [3]: ");
 
-        String input = scan.nextLine();
-        System.out.println();
+        String input;
+        while (true) { // Checks if input is 1 or 2 or 3
+            String enter =  scan.nextLine();
+            if (enter.equals("1") || enter.equals("2") || enter.equals("3")) {
+                input = enter;
+                break;
+            }
+            else { 
+                System.out.println("Input has to be book [1], author [2] or both [3].");
+             }
+        }
+        System.out.print("Your search: "); // user search input
+        String search =  scan.nextLine();
 
         ArrayList<Book> searchBook = new ArrayList<>();
         BufferedReader reader = Helper.getReader("books.csv");
@@ -62,18 +73,29 @@ public class Bookshop {
         while ((line = reader.readLine()) != null) {
             String[] parts = line.split(",");
 
-            if (parts[1].toLowerCase().contains(input.toLowerCase()) || parts[2].toLowerCase().contains(input.toLowerCase())) { // checks if the input contains the book name or author
-                Book book = new Book(parts[1], parts[2], Integer.valueOf(parts[3]), parts[4], Double.valueOf(parts[5]));
+            if (input.equals("1") && parts[0].toLowerCase().contains(search.toLowerCase())) { // adds only books that match user input through book names
+                Book book = new Book(parts[0], parts[1], Integer.valueOf(parts[2]), parts[3], Double.valueOf(parts[4]));
                 searchBook.add(book);
+            } else if (input.equals("2") && parts[1].toLowerCase().contains(search.toLowerCase())) { // adds only books that match user input through author name
+                Book book = new Book(parts[0], parts[1], Integer.valueOf(parts[2]), parts[3], Double.valueOf(parts[4]));
+                searchBook.add(book);
+            } else if (input.equals("3")) {
+                if (parts[0].toLowerCase().contains(search.toLowerCase()) || parts[1].toLowerCase().contains(search.toLowerCase())) { // adds any book that contains the search in either book or author name
+                    Book book = new Book(parts[0], parts[1], Integer.valueOf(parts[2]), parts[3], Double.valueOf(parts[4]));
+                    searchBook.add(book);
+                }
             }
         }
-        for (Book book2 : searchBook) {
-            System.out.println(book2);
-        }
-        System.out.println();
+        if (searchBook.size() == 0) {
+            System.out.println("No matching result.");
+        } else {
+            for (Book book2 : searchBook) {
+                System.out.println(book2);
+            }
+        } 
     }
 
-    public static void sortAllBooks() throws Exception { // change in what order everything is displayed
+    public static ArrayList<Book> sortAllBooks() throws Exception { // change in what order everything is displayed
 
         ArrayList<String> sortedList = new ArrayList<>();
         BufferedReader reader = Helper.getReader("books.csv");
@@ -128,15 +150,18 @@ public class Bookshop {
             }
         }
         if (order.equalsIgnoreCase("a")) {
-            for (Book book : bookList) {
-                System.out.println(book);
-            } 
+            return bookList;
+            // for (Book book : bookList) {
+            //     System.out.println(book);
+            // } 
         } else if (order.equalsIgnoreCase("d")) {
             Collections.reverse(bookList);
-            for (Book book : bookList) {
-                System.out.println(book);
-            } 
+            return bookList;
+            // for (Book book : bookList) {
+            //     System.out.println(book);
+            // } 
         }
+        return null;
     }
 
     public void filter() {}  // choose restrictions for displayed books
