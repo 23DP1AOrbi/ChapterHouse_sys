@@ -1,6 +1,7 @@
 package lv.rvt;
 
 public class Book {
+    private int index;
     private String name;
     private String author;
     private int year;

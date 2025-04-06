@@ -12,8 +12,7 @@ import java.util.*;
 
 public class Bookshop {
 
-
-    public static ArrayList<Book> allBooks() throws Exception {
+  public static ArrayList<Book> allBooks() throws Exception {
         ArrayList<Book> books = new ArrayList<>();
         BufferedReader reader = Helper.getReader("books.csv");
 
@@ -63,12 +62,11 @@ public class Bookshop {
         while ((line = reader.readLine()) != null) {
             String[] parts = line.split(",");
 
-            if (parts[0].toLowerCase().contains(input.toLowerCase()) || parts[1].toLowerCase().contains(input.toLowerCase())) {
-                Book book = new Book(parts[0], parts[1], Integer.valueOf(parts[2]), parts[3], Double.valueOf(parts[4]));
+            if (parts[1].toLowerCase().contains(input.toLowerCase()) || parts[2].toLowerCase().contains(input.toLowerCase())) { // checks if the input contains the book name or author
+                Book book = new Book(parts[1], parts[2], Integer.valueOf(parts[3]), parts[4], Double.valueOf(parts[5]));
                 searchBook.add(book);
             }
         }
-
         for (Book book2 : searchBook) {
             System.out.println(book2);
         }
@@ -76,99 +74,70 @@ public class Bookshop {
     }
 
     public static void sortAllBooks() throws Exception { // change in what order everything is displayed
-        try {
 
-        ArrayList<String> bookList = new ArrayList<>();
+        ArrayList<String> sortedList = new ArrayList<>();
         BufferedReader reader = Helper.getReader("books.csv");
 
         Scanner scan = new Scanner(System.in);
         System.out.println("Sort by book [1] or author [2]: ");
-        int input = Integer.valueOf(scan.nextLine());;
+        String input;
 
-    //     while (true) { // Checks if input is 1 or 2
-    //         String enter =  scan.nextLine();
-    //         if (enter.equals("1") || enter.equals("2")) {
-    //             input = Integer.valueOf(enter);
-    //             break;
-    //         }
-    //         else { 
-    //             System.out.println("Input has to be book [1] or author [2]");
-    //          }
-    //    }
-
-        String line;
-        reader.readLine();
-        reader.mark(0);
-        while ((line = reader.readLine()) != null) { //only takes the book name or auhtors and creates an array
-            String[] parts = line.split(",");
-            bookList.add(parts[input-1]);
+        while (true) { // Checks if input is 1 or 2
+            String enter =  scan.nextLine();
+            if (enter.equals("1") || enter.equals("2")) {
+                input = enter;
+                break;
+            }
+            else { 
+                System.out.println("Input has to be book [1] or author [2]");
+             }
         }
 
-        Collections.sort(bookList); // sorts the array alphabetically of names or authors
+       System.out.println("In ascending [A-Z] or descending [Z-A] order.");
+       System.out.println("A - ascending");
+       System.out.println("D - descending");
+       String order;
 
-        BufferedReader newReader = Helper.getReader("books.csv");
-        ArrayList<Book> books = new ArrayList<>();
-
-
-        // DOESNT WORK
-
-        String newLine;
-        newReader.readLine();
-        int counter = 0;
-        newReader.mark(1);
-        while ((newLine = newReader.readLine()) != null) {
-            
-            String[] parts = newLine.split(",");
-
-                
-            
-
-            // for (int i = 0; i < bookList.size(); i++) {
-            Book anotherBook = new Book(parts[0], parts[1], Integer.valueOf(parts[2]), parts[3], Double.valueOf(parts[4]));
-            String checkPart = parts[input-1];
-            
-            
-         
-                if (bookList.get(counter).equalsIgnoreCase(checkPart)) { ////anotherBook.getName()
-                    System.out.println(bookList.get(counter));
-                    // System.out.println(books.get(i));
-                    books.add(anotherBook);
-                    counter++;
-                    newReader.reset();
-                }
-                // }
-                
-
-        
-            
-               
-            
-               
-                // }
-
-                // if (bookList.get(i).equalsIgnoreCase(parts[0]) || bookList.get(i).equalsIgnoreCase(parts[1])) {
-                //     books.add(anotherBook);
-                //     System.out.println(parts[input-1]);
-                //     System.out.println(anotherBook);
-                // }
-                // if (parts[0].equalsIgnoreCase(bookList.get(i)) || parts[1].equalsIgnoreCase(bookList.get(i))) {
-                //     books.add(anotherBook);
-                    // System.out.println(parts[input-1]);
-                    // System.out.println(anotherBook);
-                // }
+       while (true) { // Checks if input is a/A or d/D
+            String enter =  scan.nextLine();
+            if (enter.equalsIgnoreCase("a") || enter.equalsIgnoreCase("d")) {
+                order = enter;
+                break;
             }
-        // }
-        System.out.println(bookList);
-        System.out.println(books);
-        } catch (IOException e) {
-            
-            System.out.println("stop bitching");
-        } 
-    }
+            else { 
+                System.out.println("Input has to be ascending [A] or descending [D]");
+            }
+        }
+        String line;
+        reader.readLine();
+        while ((line = reader.readLine()) != null) { //only takes the book name or auhtors and creates an array
+            String[] parts = line.split(",");
+            sortedList.add(parts[Integer.valueOf(input)-1]);
+        }
 
-    // public static void sortBooks() throws Exception{
-    //     sortAllBooks();
-    // }
+        Collections.sort(sortedList); // sorts the array alphabetically of names or authors
+        ArrayList<Book> ogList = allBooks();
+        ArrayList<Book> bookList = new ArrayList<>();
+      
+        for (String sortedItem : sortedList) {
+            for (Book book : ogList) {
+                if (book.getName().equals(sortedItem) || book.getAuthor().equals(sortedItem)) {
+                    // Add the book to the bookList if it matches either name or author
+                    bookList.add(book);
+                }
+            }
+        }
+        if (order.equalsIgnoreCase("a")) {
+            for (Book book : bookList) {
+                System.out.println(book);
+            } 
+        } else if (order.equalsIgnoreCase("d")) {
+            Collections.reverse(bookList);
+            for (Book book : bookList) {
+                System.out.println(book);
+            } 
+        }
+    }
 
     public void filter() {}  // choose restrictions for displayed books
 }

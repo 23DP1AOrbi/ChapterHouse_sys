@@ -3,13 +3,12 @@ package lv.rvt;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Structure extends Bookshop{ // structure for the program
+public class Structure { // structure for the program
 
     public static void start() throws Exception{  // initial terminal
         Scanner scan = new Scanner(System.in);
 
         Structure.instructions();
-        System.out.println();
 
         while (true) {
             String input = scan.nextLine();
@@ -17,7 +16,7 @@ public class Structure extends Bookshop{ // structure for the program
                 break;
             }
 
-            else if (input.equalsIgnoreCase("display")) {
+            else if (input.equalsIgnoreCase("show")) {
                 ArrayList<Book> books = Bookshop.allBooks();
 
                 for (Book book : books) {
@@ -76,7 +75,7 @@ public class Structure extends Bookshop{ // structure for the program
         System.out.println("search - search for a book or author");
         System.out.println("filter - filter books and sort with differing criteria");
         System.out.println("sort - decide how books are sorted");
-        System.out.println("display - show list of books");
+        System.out.println("show - show list of books");
         System.out.println("stop - end program");
     }
 }
