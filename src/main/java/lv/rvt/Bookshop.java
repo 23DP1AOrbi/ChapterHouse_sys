@@ -7,7 +7,6 @@ import lv.rvt.roles.User;
 import lv.rvt.tools.Helper;
 
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 
