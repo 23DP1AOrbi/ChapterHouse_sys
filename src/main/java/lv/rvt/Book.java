@@ -1,7 +1,6 @@
 package lv.rvt;
 
 public class Book {
-    private int index;
     private String name;
     private String author;
     private int year;
@@ -30,5 +29,9 @@ public class Book {
 
     public String getAuthor() {
         return this.author;
+    }
+
+    public double getPrice() {
+        return this.price;
     }
 }
