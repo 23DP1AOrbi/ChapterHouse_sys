@@ -101,7 +101,7 @@ public class Bookshop {
         BufferedReader reader = Helper.getReader("books.csv");
 
         Scanner scan = new Scanner(System.in);
-        System.out.println("Sort by book name [1], author [2] or price [3]: ");
+        System.out.println("Sort by book name [1], author [2], price [3] or year [4]: ");
         String input = null;
 
         while (true) { // Checks if input is 1 or 2
@@ -109,28 +109,13 @@ public class Bookshop {
             if (enter.equals("1") || enter.equals("2")) {
                 input = enter;
                 break;
-            } if (enter.equals("3")) {
+            } if (enter.equals("3") || enter.equals("4")) {
                 ArrayList<Book> books = sortByPrice();
                 return books;
             }
             else { 
-                System.out.println("Input has to be book name [1], author [2] or price [3].");
+                System.out.println("Input has to be book name [1], author [2], price [3] or year [4].");
              }
-        }
-
-       System.out.println("In ascending [A-Z] or descending [Z-A] order.");
-       System.out.println("A - ascending");
-       System.out.println("D - descending");
-       String order;
-
-       while (true) { // Checks if input is a/A or d/D
-            String enter =  scan.nextLine();
-            if (enter.equalsIgnoreCase("a") || enter.equalsIgnoreCase("d")) {
-                order = enter;
-                break;
-            } else { 
-                System.out.println("Input has to be ascending [A] or descending [D].");
-            }
         }
 
         String line;
@@ -153,6 +138,7 @@ public class Bookshop {
             }
         }
 
+        String order = sortDirection();
         if (order.equalsIgnoreCase("a")) {
             return bookList;
         } else if (order.equalsIgnoreCase("d")) { // returns the same list reversed
@@ -162,28 +148,11 @@ public class Bookshop {
         return null;
     }
 
-    public static ArrayList<Book> sortByPrice() throws Exception {
-        Scanner scan = new Scanner(System.in);
+    public static ArrayList<Book> sortByPrice() throws Exception { //similar to sortAllBooks but does it by price instead
         BufferedReader reader = Helper.getReader("books.csv");
-
-        System.out.println("In ascending [0-10] or descending [10-0] order.");
-        System.out.println("A - ascending");
-        System.out.println("D - descending");
-        String order;
-
-        
-        while (true) { // Checks if input is a/A or d/D
-            String enter =  scan.nextLine();
-            if (enter.equalsIgnoreCase("a") || enter.equalsIgnoreCase("d")) {
-                order = enter;
-                break;
-            } else { 
-                System.out.println("Input has to be ascending [A] or descending [D].");
-            }
-        }
+        ArrayList<Double> sortedList = new ArrayList<>();
 
         String line;
-        ArrayList<Double> sortedList = new ArrayList<>();
         reader.readLine();
         while ((line = reader.readLine()) != null) { //only takes the book name or auhtors and creates an array
             String[] parts = line.split(",");
@@ -194,8 +163,7 @@ public class Bookshop {
         ArrayList<Book> ogList = allBooks();
         ArrayList<Book> bookList = new ArrayList<>();
 
-        ArrayList<Double> sortedListWithoutDuplicates = (ArrayList<Double>) sortedList.stream().distinct().collect(Collectors.toList());
-        
+        ArrayList<Double> sortedListWithoutDuplicates = (ArrayList<Double>) sortedList.stream().distinct().collect(Collectors.toList()); // removes duplicates from sortedList
         for (double sortedItem : sortedListWithoutDuplicates) {
             for (Book book : ogList) {
                 if (book.getPrice() == sortedItem) { // adds book if the price matchces
@@ -203,15 +171,30 @@ public class Bookshop {
                 }
             }
         }
+
+        String order = sortDirection(); // gets how to display the list
         if (order.equalsIgnoreCase("a")) {
             return bookList;
         } else if (order.equalsIgnoreCase("d")) { // returns the same list reversed
             Collections.reverse(bookList);
             return bookList;
         } return null;
-        
+    }
 
+    public static String sortDirection() { // Checks how to display the sorted list 
+        Scanner scan = new Scanner(System.in);
+        System.out.println("In ascending [A-Z] or descending [Z-A] order.");
+        System.out.println("A - ascending");
+        System.out.println("D - descending");
 
+        while (true) { // Checks if input is a/A or d/D
+            String enter =  scan.nextLine();
+            if (enter.equalsIgnoreCase("a") || enter.equalsIgnoreCase("d")) {
+                return enter;
+            } else { 
+                System.out.println("Input has to be ascending [A] or descending [D].");
+            }
+        }
     }
 
     public void filter() {}  // choose restrictions for displayed books
