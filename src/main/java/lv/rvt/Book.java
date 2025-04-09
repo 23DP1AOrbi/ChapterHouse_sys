@@ -34,4 +34,8 @@ public class Book {
     public double getPrice() {
         return this.price;
     }
+
+    public int getYear() {
+        return this.year;
+    }
 }

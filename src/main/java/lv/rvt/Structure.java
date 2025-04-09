@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Structure { // structure for the program
 
-    public static void start() throws Exception{  // initial terminal
+    public static void start() throws Throwable{  // initial terminal
         Scanner scan = new Scanner(System.in);
 
         Structure.instructions();

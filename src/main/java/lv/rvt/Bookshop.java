@@ -95,7 +95,7 @@ public class Bookshop {
         } 
     }
 
-    public static ArrayList<Book> sortAllBooks() throws Exception { // change in what order everything is displayed
+    public static ArrayList<Book> sortAllBooks() throws Throwable { // change in what order everything is displayed
 
         ArrayList<String> sortedList = new ArrayList<>();
         BufferedReader reader = Helper.getReader("books.csv");
@@ -109,8 +109,11 @@ public class Bookshop {
             if (enter.equals("1") || enter.equals("2")) {
                 input = enter;
                 break;
-            } if (enter.equals("3") || enter.equals("4")) {
+            } if (enter.equals("3")) {
                 ArrayList<Book> books = sortByPrice();
+                return books;
+            } if (enter.equals("4")) {
+                ArrayList<Book> books = sortByYear();
                 return books;
             }
             else { 
@@ -154,7 +157,7 @@ public class Bookshop {
 
         String line;
         reader.readLine();
-        while ((line = reader.readLine()) != null) { //only takes the book name or auhtors and creates an array
+        while ((line = reader.readLine()) != null) { //only takes the price
             String[] parts = line.split(",");
             sortedList.add(Double.valueOf(parts[4])); 
         }
@@ -167,6 +170,39 @@ public class Bookshop {
         for (double sortedItem : sortedListWithoutDuplicates) {
             for (Book book : ogList) {
                 if (book.getPrice() == sortedItem) { // adds book if the price matchces
+                    bookList.add(book);
+                }
+            }
+        }
+
+        String order = sortDirection(); // gets how to display the list
+        if (order.equalsIgnoreCase("a")) {
+            return bookList;
+        } else if (order.equalsIgnoreCase("d")) { // returns the same list reversed
+            Collections.reverse(bookList);
+            return bookList;
+        } return null;
+    }
+
+    public static ArrayList<Book> sortByYear() throws Throwable {
+        BufferedReader reader = Helper.getReader("books.csv");
+        ArrayList<Integer> sortedList = new ArrayList<>();
+
+        String line;
+        reader.readLine();
+        while ((line = reader.readLine()) != null) { //only takes the year
+            String[] parts = line.split(",");
+            sortedList.add(Integer.valueOf(parts[2])); 
+        }
+
+        Collections.sort(sortedList); // Sorts by hihghest number
+        ArrayList<Book> ogList = allBooks();
+        ArrayList<Book> bookList = new ArrayList<>();
+
+        ArrayList<Integer> sortedListWithoutDuplicates = (ArrayList<Integer>) sortedList.stream().distinct().collect(Collectors.toList()); // removes duplicates from sortedList
+        for (int sortedItem : sortedListWithoutDuplicates) {
+            for (Book book : ogList) {
+                if (book.getYear() == sortedItem) { // adds book if the year matchces
                     bookList.add(book);
                 }
             }
