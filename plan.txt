@@ -12,3 +12,27 @@ Assign roles to users:
     Admin - add, remove books, change price, create another admin
     Regular user (shopper) - buy, statistics, ++++search (author/book name), filter (a-z, z-a, price range (ascendeing or descending), genre, year range), how many items they wish to see at a time
 
+
+Reading list
+
+action/choices in order:
+    login/register: 
+        username & email
+        if regular user:
+            see all books:
+                sort
+                filter
+                search
+                add
+            see your booklist:
+                sort
+                filter
+                search
+                remove
+            exit
+        if admin:
+            see all books:
+                change price
+                add book
+            see all users
+            make another admin - ?

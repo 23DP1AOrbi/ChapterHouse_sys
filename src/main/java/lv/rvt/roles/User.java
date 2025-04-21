@@ -2,15 +2,25 @@ package lv.rvt.roles;
 
 public class User {
     private String name;
-    private String password;
     private String email;
-    private String admin;
+    private boolean admin;
 
-    public User(String name, String password, String email, String admin) {
+    public User(String name, String email, boolean admin) {
         this.name = name;
-        this.password = password;
         this.email = email;
         this.admin = admin;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String toCSV() {
+        return this.name + "," + this.email + ",false";
     }
 
 
