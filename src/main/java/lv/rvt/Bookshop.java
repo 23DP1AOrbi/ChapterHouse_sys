@@ -2,6 +2,7 @@ package lv.rvt;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.nio.file.StandardOpenOption;
 import lv.rvt.roles.User;
 import lv.rvt.tools.Helper;
@@ -242,7 +243,6 @@ public class Bookshop {
 
     public void filter() {}  // choose restrictions for displayed books
 
-
     public static boolean entry() throws Exception {
         Scanner scan = new Scanner(System.in);
        
@@ -255,12 +255,10 @@ public class Bookshop {
             }
 
             if (choice.equalsIgnoreCase("login")) {
-               login();
-               return true;
+               return login();
                 
             } else if (choice.equalsIgnoreCase("register")) {
-                register();
-                return true;
+                return register();
                 
             } else {
                 System.out.println("Must input one of the choices.");
@@ -268,46 +266,98 @@ public class Bookshop {
         } 
     }
 
-    public static void login() throws Exception {
-        Scanner scan = new Scanner(System.in);
-        ArrayList<User> users = allUsers();
-
-        System.out.println("Enter username: ");
-        String username = scan.nextLine();
-
-        String email;
-        String emailPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@" 
-        + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-
-        while (true) {
-            System.out.println("Enter email: ");
-            String emailRtr = scan.nextLine();
-
-            if (emailRtr.matches(emailPattern)) {
-                email = emailRtr;
-                break;
-            }
-            System.out.println("Email must be the right pattern.");
-            System.out.println();            
-        }
-
-        for (User userInfo : users) {
-            if (userInfo.getName().matches(username) && userInfo.getEmail().matches(email)) {
-                System.out.println("login works");
-                break;
-            }
-        }
-    }
-
-    public static void register() throws Exception {
+    public static boolean login() throws Exception {
         Scanner scan = new Scanner(System.in);
         ArrayList<User> users = allUsers();
         boolean REGISTRY = true;
+        boolean QUIT = false;
+
+        while (REGISTRY) {
+
+        String username;
+            while (true) { // username check - cant be blank or shorter than 4 characters
+                System.out.println("Enter username: ");
+                String name = scan.nextLine();
+
+                if (!(name.equals(null)) && name.length() > 3) { 
+                    username = name;
+                    break;
+                } else {
+                    System.out.println("Username has to be at least 4 characters.");
+                }
+                    
+            }
+
+            String email;
+            String emailPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@" 
+            + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+
+            while (true) { // checks if input matches email pattern
+                System.out.println("Enter email: ");
+                String emailRtr = scan.nextLine();
+
+                if (emailRtr.matches(emailPattern)) {
+                    email = emailRtr;
+                    break;
+                }
+                System.out.println("Email must be the right pattern.");
+                System.out.println();            
+            }
+
+            boolean userExists = false;
+
+            
+            for (User userInfo : users) { // if user exists stops the method and returns true
+                if (userInfo.getName().matches(username) && userInfo.getEmail().matches(email)) {
+                    userExists = true;
+                    REGISTRY = false;
+                    return true;
+                } else if (userInfo.getEmail().matches(email)) {
+                    System.out.println("Wrong username.");
+                }
+            }
+
+            while (!userExists) {
+                System.out.println("User doesn't exist");
+                System.out.println("try again [a] / exit [e]");
+                String choice = scan.nextLine();
+
+                if (choice.equalsIgnoreCase("a")) {
+                    break;
+                } else if (choice.equalsIgnoreCase("e")) { // if user exits, the while cycle for registering ends
+                    REGISTRY = false;                                    // and goes back to the intro for registering choice
+                    boolean FAIL = entry();
+                    QUIT = FAIL;
+                    break;
+                } else {
+                    System.out.println("Input must be a or e");
+                    System.out.println();
+                }
+            }
+        }
+        return QUIT;
+    }
+
+    public static boolean register() throws Exception {
+        Scanner scan = new Scanner(System.in);
+        ArrayList<User> users = allUsers();
+        boolean REGISTRY = true;
+        boolean QUIT = false;
 
         while (REGISTRY) {
             
-            System.out.println("Enter username: ");
-            String username = scan.nextLine();
+            String username;
+            while (true) { // username check - cant be blank or shorter than 4 characters
+                System.out.println("Enter username: ");
+                String name = scan.nextLine();
+
+                if (!(name.equals(null)) && name.length() > 3) {
+                    username = name;
+                    break;
+                } else {
+                    System.out.println("Username has to be at least 4 characters.");
+                }
+            }
 
             String email;
             String emailPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@" 
@@ -327,7 +377,7 @@ public class Bookshop {
 
             User user = new User(username, email, false);
             boolean userExists = false;
-
+            
             for (User userInfo : users) { // checks if user with the same name & email is already being used
                 if (userInfo.getName().equals(user.getName()) && userInfo.getEmail().equals(user.getEmail())) {
                     System.out.println("User already exists.");
@@ -337,13 +387,27 @@ public class Bookshop {
                     System.out.println("Email already in use.");
                     userExists = true;
                     break;
-                } 
+                } else if (userInfo.getName().equals(user.getName())) {
+                    System.out.println("Username is taken.");
+                    userExists = true;
+                    break;
+                }
             }
 
             if (!userExists) { // if the user doesnt exist user gets added
                 Bookshop.addUser(user);
                 System.out.println("New user added");
-                break;
+
+                // make new file to store added books
+                File file = new File("/workspaces/Eksamens_praktiskais/data/"+ user.getName() +".csv");
+                file.createNewFile();
+
+                BufferedWriter writer = Helper.getWriter(user.getName()+".csv", StandardOpenOption.APPEND);
+                // TimeUnit.SECONDS.sleep(4);
+                writer.write("Name,Author,Year,Genre,Price (EUR),Completed reading");
+                writer.newLine();
+                writer.close();
+                return true;
             }
 
             while (true) {
@@ -352,8 +416,10 @@ public class Bookshop {
 
                 if (choice.equalsIgnoreCase("a")) {
                     break;
-                } else if (choice.equalsIgnoreCase("e")) { // if user exits, while cycle for registering ends
-                    REGISTRY = false;
+                } else if (choice.equalsIgnoreCase("e")) { // if user exits, the while cycle for registering ends
+                    REGISTRY = false;                                    // and goes back to the intro for registering choice
+                    boolean FAIL = entry();
+                    QUIT = FAIL;
                     break;
                 } else {
                     System.out.println("Input must be a or e");
@@ -361,6 +427,6 @@ public class Bookshop {
                 }
             }
         }
+        return QUIT;
     }
-
 }
