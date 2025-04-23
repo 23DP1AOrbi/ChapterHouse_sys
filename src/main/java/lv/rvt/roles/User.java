@@ -23,10 +23,6 @@ public class User {
         return this.name + "," + this.email + ",false";
     }
 
-
     public void buyBook(){}
-
-    
-
 
 }

@@ -4,16 +4,21 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Structure { // structure for the program
+    private static Bookshop user;
 
     public static void start() throws Throwable{  // initial terminal
         Scanner scan = new Scanner(System.in);
 
         boolean INTRO = true;
+
+        // ArrayList<Book> bookie = Bookshop.allBooks();
         while (INTRO) {
 
             boolean SYSTEM = Bookshop.entry();
             while (SYSTEM) {
                 Structure.instructions();
+
+                System.out.println(user);
 
                 String input = scan.nextLine();
                 if (input.equalsIgnoreCase("stop")) {

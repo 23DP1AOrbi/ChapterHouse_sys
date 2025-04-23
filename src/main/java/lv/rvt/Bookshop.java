@@ -12,6 +12,19 @@ import java.util.stream.Collectors;
 
 
 public class Bookshop {
+    // private String user;
+
+    // public Bookshop(String user) {
+    //     this.user = user;
+    // }
+    
+    // // public static void setUser(String newUser) {
+    // //     this.user = newUser;
+    // // }
+
+    // public String getUser() {
+    //     return this.user;
+    // }
 
   public static ArrayList<Book> allBooks() throws Exception {
         ArrayList<Book> books = new ArrayList<>();
@@ -29,6 +42,8 @@ public class Bookshop {
 
     public static ArrayList<User> allUsers() throws Exception {
         ArrayList<User> users = new ArrayList<>();
+        // System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        // System.out.println(new File(".").getAbsolutePath());
         BufferedReader reader = Helper.getReader("users.csv");
 
         String line;
@@ -87,8 +102,8 @@ public class Bookshop {
             } else if (input.equals("2") && parts[1].toLowerCase().contains(search.toLowerCase())) { // adds only books that match user input through author name
                 Book book = new Book(parts[0], parts[1], Integer.valueOf(parts[2]), parts[3], Double.valueOf(parts[4]));
                 searchBook.add(book);
-            } else if (input.equals("3")) {
-                if (parts[0].toLowerCase().contains(search.toLowerCase()) || parts[1].toLowerCase().contains(search.toLowerCase())) { // adds any book that contains the search in either book or author name
+            } else if (input.equals("3")) { // adds any book that contains the search in either book or author name
+                if (parts[0].toLowerCase().contains(search.toLowerCase()) || parts[1].toLowerCase().contains(search.toLowerCase())) { 
                     Book book = new Book(parts[0], parts[1], Integer.valueOf(parts[2]), parts[3], Double.valueOf(parts[4]));
                     searchBook.add(book);
                 }
@@ -285,7 +300,6 @@ public class Bookshop {
                 } else {
                     System.out.println("Username has to be at least 4 characters.");
                 }
-                    
             }
 
             String email;
@@ -309,6 +323,7 @@ public class Bookshop {
             
             for (User userInfo : users) { // if user exists stops the method and returns true
                 if (userInfo.getName().matches(username) && userInfo.getEmail().matches(email)) {
+                    // Bookshop user = new Bookshop(username);
                     userExists = true;
                     REGISTRY = false;
                     return true;
@@ -337,6 +352,10 @@ public class Bookshop {
         }
         return QUIT;
     }
+
+    // private static void Bookshop(String username) {
+    //     username = this.user;
+    // }
 
     public static boolean register() throws Exception {
         Scanner scan = new Scanner(System.in);

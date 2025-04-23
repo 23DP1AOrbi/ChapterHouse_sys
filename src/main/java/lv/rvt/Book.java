@@ -38,4 +38,8 @@ public class Book {
     public int getYear() {
         return this.year;
     }
+    
+    public String getGenre() {
+        return this.genre;
+    }
 }
