@@ -1,34 +1,31 @@
-Name,Author,Year,Genre,Price (EUR)
-To Kill a Mockingbird,Harper Lee,1960,Historical Fiction,11.95
-Harry Potter and the Sorcerer's Stone,J.K. Rowling,1997,Fantasy,10.11
-The Great Gatsby,F. Scott Fitzgerald,1925,Classic,9.19
-The Hunger Games,Suzanne Collins,2008,Dystopian,11.03
-Charlotte's Web,E.B. White,1952,Children’s Fiction,7.35
-The Fault in Our Stars,John Green,2012,Romance,10.11
-Pride and Prejudice,Jane Austen,1813,Romance,8.27
-Where the Red Fern Grows,Wilson Rawls,1961,Children’s Fiction,7.35
-The Da Vinci Code,Dan Brown,2003,Thriller,13.79
-Wonder,R.J. Palacio,2012,Contemporary Fiction,9.19
-The Catcher in the Rye,J.D. Salinger,1951,Coming-of-Age,10.11
-1984,George Orwell,1949,Dystopian,9.19
-The Chronicles of Narnia,C.S. Lewis,1950,Fantasy,27.59
-Fahrenheit 451,Ray Bradbury,1953,Dystopian,11.03
-The Lord of the Rings,J.R.R. Tolkien,1954,Fantasy,23.91
-Little Women,Louisa May Alcott,1868,Classic,9.19
-The Picture of Dorian Gray,Oscar Wilde,1890,Gothic Fiction,8.27
-Anne of Green Gables,L.M. Montgomery,1908,Coming-of-Age,7.35
-The Perks of Being a Wallflower,Stephen Chbosky,1999,Coming-of-Age,10.11
-A Wrinkle in Time,Madeleine L'Engle,1962,Science Fiction,8.27
-Brave New World,Aldous Huxley,1932,Dystopian,10.11
-The Secret Garden,Frances Hodgson Burnett,1911,Children’s Fiction,7.35
-Circe,Madeline Miller,2018,Mythology,13.79
-The Night Circus,Erin Morgenstern,2011,Fantasy,12.87
-Educated,Tara Westover,2018,Memoir,14.71
-Homegoing,Yaa Gyasi,2016,Historical Fiction,13.79
-A Man Called Ove,Fredrik Backman,2012,Contemporary Fiction,12.87
-Little Fires Everywhere,Celeste Ng,2017,Contemporary Fiction,13.79
-The Hate U Give,Angie Thomas,2017,Contemporary Fiction,11.03
-An Ember in the Ashes,Sabaa Tahir,2015,Fantasy,11.95
-Children of Blood and Bone,Tomi Adeyemi,2018,Fantasy,11.95
-The Song of Achilles,Madeline Miller,2011,Mythology,12.87
-The Cold War,John Lewis Gaddis,2005,Non-Fiction,10.53
+Id,Name,Author,Year,Genre,Price (EUR)
+1,Harry Potter and the Sorcerer's Stone,J.K. Rowling,1997,Fantasy,10.99
+2,The Lord of the Rings,J.R.R. Tolkien,1954,Fantasy,22.50
+3,The Night Circus,Erin Morgenstern,2011,Fantasy,12.45
+4,Children of Blood and Bone,Tomi Adeyemi,2018,Fantasy,11.25
+5,An Ember in the Ashes,Sabaa Tahir,2015,Fantasy,10.85
+6,Pride and Prejudice,Jane Austen,1813,Romance,8.99
+7,The Fault in Our Stars,John Green,2012,Romance,9.75
+8,Jane Eyre,Charlotte Brontë,1847,Romance,9.50
+9,Me Before You,Jojo Moyes,2012,Romance,10.95
+10,The Notebook,Nicholas Sparks,1996,Romance,9.25
+11,The Hunger Games,Suzanne Collins,2008,Dystopian,10.75
+12,1984,George Orwell,1949,Dystopian,9.40
+13,Fahrenheit 451,Ray Bradbury,1953,Dystopian,10.10
+14,Brave New World,Aldous Huxley,1932,Dystopian,9.80
+15,Scythe,Neal Shusterman,2016,Dystopian,11.60
+16,Wonder,R.J. Palacio,2012,Contemporary Fiction,8.95
+17,Little Fires Everywhere,Celeste Ng,2017,Contemporary Fiction,11.30
+18,The Hate U Give,Angie Thomas,2017,Contemporary Fiction,10.65
+19,A Man Called Ove,Fredrik Backman,2012,Contemporary Fiction,12.25
+20,Eleanor Oliphant Is Completely Fine,Gail Honeyman,2017,Contemporary Fiction,11.75
+21,To Kill a Mockingbird,Harper Lee,1960,Historical Fiction,11.10
+22,Homegoing,Yaa Gyasi,2016,Historical Fiction,13.40
+23,All the Light We Cannot See,Anthony Doerr,2014,Historical Fiction,12.95
+24,The Book Thief,Markus Zusak,2005,Historical Fiction,11.90
+25,The Help,Kathryn Stockett,2009,Historical Fiction,10.85
+26,Educated,Tara Westover,2018,Non-Fiction,14.50
+27,Becoming,Michelle Obama,2018,Non-Fiction,13.75
+28,Sapiens,Yuval Noah Harari,2011,Non-Fiction,15.25
+29,The Cold War,John Lewis Gaddis,2005,Non-Fiction,10.95
+30,Outliers,Malcolm Gladwell,2008,Non-Fiction,12.60

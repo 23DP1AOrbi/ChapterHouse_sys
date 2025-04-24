@@ -1,24 +1,29 @@
 package lv.rvt;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import lv.rvt.roles.User;
+import lv.rvt.tools.Helper;
+
 public class Structure { // structure for the program
-    private static Bookshop user;
 
     public static void start() throws Throwable{  // initial terminal
         Scanner scan = new Scanner(System.in);
 
         boolean INTRO = true;
-
-        // ArrayList<Book> bookie = Bookshop.allBooks();
         while (INTRO) {
 
             boolean SYSTEM = Bookshop.entry();
+            String currentUser = User.getCurrentUser();
+
+            System.out.println(User.getCurrentUser());
             while (SYSTEM) {
                 Structure.instructions();
-
-                System.out.println(user);
 
                 String input = scan.nextLine();
                 if (input.equalsIgnoreCase("stop")) {
@@ -26,12 +31,8 @@ public class Structure { // structure for the program
                 }
     
                 else if (input.equalsIgnoreCase("show")) {
-                    ArrayList<Book> books = Bookshop.allBooks();
-    
-                    for (Book book : books) {
-                        System.out.println(book);
-                    }
-                    System.out.println();
+                    show();
+                    choiceAllBooks();
                 }
     
                 else if (input.equalsIgnoreCase("help")) {
@@ -40,39 +41,39 @@ public class Structure { // structure for the program
                     System.out.println();
                 }
     
-                else if (input.equalsIgnoreCase("search")) {
-                    Bookshop.search();
-                }
+                // else if (input.equalsIgnoreCase("search")) {
+                //     Bookshop.search();
+                // }
     
-                else if (input.equalsIgnoreCase("sort")) {
-                    ArrayList<Book> sortedBooks =  Bookshop.sortAllBooks();
+                // else if (input.equalsIgnoreCase("sort")) {
+                //     ArrayList<Book> sortedBooks =  Bookshop.sortAllBooks();
     
-                    for (Book book : sortedBooks) {
-                        System.out.println(book);
-                    }
-                    System.out.println();
-                }
+                //     for (Book book : sortedBooks) {
+                //         System.out.println(book);
+                //     }
+                //     System.out.println();
+                // }
     
-                else if (input.equalsIgnoreCase("add")) {
-                    System.out.println("Enter the name of the book: ");
-                    String name = scan.nextLine();
+                // else if (input.equalsIgnoreCase("add")) {
+                //     System.out.println("Enter the name of the book: ");
+                //     String name = scan.nextLine();
     
-                    System.out.println("Enter the author of the book: ");
-                    String author = scan.nextLine();
+                //     System.out.println("Enter the author of the book: ");
+                //     String author = scan.nextLine();
     
-                    System.out.println("Enter the year of publication: ");
-                    int year = Integer.valueOf(scan.nextLine());
+                //     System.out.println("Enter the year of publication: ");
+                //     int year = Integer.valueOf(scan.nextLine());
     
-                    System.out.println("Enter the genre of the book: ");
-                    String genre = scan.nextLine();
+                //     System.out.println("Enter the genre of the book: ");
+                //     String genre = scan.nextLine();
     
-                    System.out.println("Enter the price of the book: ");
-                    double price = Double.valueOf(scan.nextLine());
+                //     System.out.println("Enter the price of the book: ");
+                //     double price = Double.valueOf(scan.nextLine());
     
-                    Book book = new Book(name, author, year, genre, price);
-                    Bookshop.addBook(book);
-                    System.out.println("Book got added");
-                }
+                //     Book book = new Book(name, author, year, genre, price);
+                //     Bookshop.addBook(book);
+                //     System.out.println("Book got added");
+                // }
             } 
 
 
@@ -95,7 +96,7 @@ public class Structure { // structure for the program
                 } else if (choice.equalsIgnoreCase("n")) {
                     break;
                 } else {
-                    System.out.println("Input must be y/n.");
+                    System.out.println("Input must be [y] / [n].");
                 }
             }
         }
@@ -103,13 +104,120 @@ public class Structure { // structure for the program
     }
 
     public static void instructions(){ // instruction output
-        System.out.println("add - add a book to the list");
         System.out.println("help - show what the commands do");
-        System.out.println("search - search for a book or author");
         System.out.println("filter - filter books and sort with differing criteria");
-        System.out.println("sort - decide how books are sorted");
         System.out.println("show - show list of books");
         System.out.println("stop - end program");
+    }
+
+
+    public static void show() throws Exception{
+        Scanner scan = new Scanner(System.in);
+
+        System.out.println("Show all books [a] / show your reading list [l] / exit [x].");
+
+        while (true) {
+            String input = scan.nextLine();
+            if (input.equalsIgnoreCase("a")) {
+                ArrayList<Book> books = Bookshop.allBooks();
+                for (Book book : books) {
+                    System.out.println(book);
+                }
+                System.out.println();
+                break;
+            } else if (input.equalsIgnoreCase("l")) {
+                ArrayList<Book> books = Bookshop.allUserBooks();
+                for (Book book : books) {
+                    System.out.println(book);
+                }
+                System.out.println();
+                break;
+            } else if (input.equalsIgnoreCase("x")) {
+                break;
+            } else {
+                System.out.println("Invalid input.");
+            }
+        }
+    }
+
+    public static void choiceAllBooks() throws Throwable {
+        Scanner scan = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("All books");
+            System.out.println("Sort [s] / search [e] / filter [f] / add [a] / exit [x]");
+
+            String input = scan.nextLine();
+            if (input.equals("x")) {
+                break;
+            } else if (input.equalsIgnoreCase("s")) {
+                ArrayList<Book> sortedBooks =  Bookshop.sortAllBooks();
+                for (Book book : sortedBooks) {
+                    System.out.println(book);
+                }
+                System.out.println();
+            } else if (input.equalsIgnoreCase("e")) {
+                Bookshop.search();
+            } else if (input.equalsIgnoreCase("f")) {
+                Bookshop.filter();
+            } else if (input.equalsIgnoreCase("a")) {
+                Structure.addBook();
+            } else if (input.equalsIgnoreCase("x")) {
+                break;
+            } else {
+                System.out.println("Invalid input.");
+            }    
+        }
+    }
+
+    public static void addBookToUserReadingList(Book book) throws IOException {
+        BufferedWriter writer = Helper.getWriter(User.getCurrentUser() + ".csv", StandardOpenOption.APPEND);
+        writer.write(book.toCSV());
+        writer.newLine();
+        writer.close();
+    }
+
+    public static void addBook() throws Exception {
+        Scanner scan = new Scanner(System.in);
+        ArrayList<Book> books = Bookshop.allBooks();
+        ArrayList<Book> userBooks = Bookshop.allUserBooks();
+
+        String bookId;
+        while (true) { 
+            System.out.println("Book ID: ");
+            String valueCheck = scan.nextLine();
+            if (valueCheck.contains(".") || valueCheck.contains(",")) { // checks if user input has [.] or [,] to check if its a double 
+                System.out.println("Input has to be an integer.");
+            } else if (!(valueCheck.contains(".")) && valueCheck.matches("-?\\d+(\\.\\d+)?")) { // if input doesnt have a [.] and is a valid number, 
+                if (Integer.valueOf(valueCheck) >= 0 && Integer.valueOf(valueCheck) <= 30) {            // it goes through
+                    bookId = valueCheck;                  
+                    break;
+                } else {
+                    System.out.println("Input has to be 1-30.");
+                }
+            } else {
+                System.out.println("Input has to be an integer.");
+            }
+        }
+
+        boolean bookExists = false;
+        for (Book userBook : userBooks) { // if user book list has the book, the book doesnt get added
+            if (Integer.valueOf(bookId) == userBook.getId()) {
+                bookExists = true;
+                System.out.println("List already includes this book.");
+                break;
+            }
+        }
+
+        if (!bookExists) { // only adds book if it doesnt alredy exist in the users list
+            for (Book book : books) {
+                if (Integer.valueOf(bookId) == book.getId()) {
+                    Bookshop.addBookToUserReadingList(book);
+                    System.out.println("Book added to reading list.");
+                }
+            }
+        }
+            
     }
 
 }

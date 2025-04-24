@@ -1,13 +1,15 @@
 package lv.rvt;
 
 public class Book {
+    private int id;
     private String name;
     private String author;
     private int year;
     private String genre;
     private double price;
 
-    public Book(String name, String author, int year, String genre, double price) {
+    public Book(int id, String name, String author, int year, String genre, double price) {
+        this.id = id;
         this.name = name;
         this.author = author;
         this.year = year;
@@ -16,11 +18,15 @@ public class Book {
     }
 
     public String toString() {
-        return this.name + " by " + this.author + ": €" + this.price;
+        return this.id + "| " + this.name + " by " + this.author + ": €" + this.price;
     }
 
     public String toCSV() {
-        return this.name + "," + this.author + "," + this.year + "," + this.genre + "," + this.price;
+        return this.id + "," + this.name + "," + this.author + "," + this.year + "," + this.genre + "," + this.price;
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     public String getName() {
