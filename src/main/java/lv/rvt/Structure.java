@@ -1,14 +1,9 @@
 package lv.rvt;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import lv.rvt.roles.User;
-import lv.rvt.tools.Helper;
 
 public class Structure { // structure for the program
 
@@ -32,7 +27,7 @@ public class Structure { // structure for the program
     
                 else if (input.equalsIgnoreCase("show")) {
                     show();
-                    choiceAllBooks();
+                    // choiceAllBooks();
                 }
     
                 else if (input.equalsIgnoreCase("help")) {
@@ -40,19 +35,6 @@ public class Structure { // structure for the program
                     Structure.instructions();
                     System.out.println();
                 }
-    
-                // else if (input.equalsIgnoreCase("search")) {
-                //     Bookshop.search();
-                // }
-    
-                // else if (input.equalsIgnoreCase("sort")) {
-                //     ArrayList<Book> sortedBooks =  Bookshop.sortAllBooks();
-    
-                //     for (Book book : sortedBooks) {
-                //         System.out.println(book);
-                //     }
-                //     System.out.println();
-                // }
     
                 // else if (input.equalsIgnoreCase("add")) {
                 //     System.out.println("Enter the name of the book: ");
@@ -100,7 +82,6 @@ public class Structure { // structure for the program
                 }
             }
         }
-        
     }
 
     public static void instructions(){ // instruction output
@@ -111,7 +92,7 @@ public class Structure { // structure for the program
     }
 
 
-    public static void show() throws Exception{
+    public static void show() throws Throwable{
         Scanner scan = new Scanner(System.in);
 
         System.out.println("Show all books [a] / show your reading list [l] / exit [x].");
@@ -124,6 +105,7 @@ public class Structure { // structure for the program
                     System.out.println(book);
                 }
                 System.out.println();
+                choiceAllBooks();
                 break;
             } else if (input.equalsIgnoreCase("l")) {
                 ArrayList<Book> books = Bookshop.allUserBooks();
@@ -131,6 +113,7 @@ public class Structure { // structure for the program
                     System.out.println(book);
                 }
                 System.out.println();
+                choiceUserList();
                 break;
             } else if (input.equalsIgnoreCase("x")) {
                 break;
@@ -151,13 +134,13 @@ public class Structure { // structure for the program
             if (input.equals("x")) {
                 break;
             } else if (input.equalsIgnoreCase("s")) {
-                ArrayList<Book> sortedBooks =  Bookshop.sortAllBooks();
+                ArrayList<Book> sortedBooks =  Bookshop.sortAllBooks("");
                 for (Book book : sortedBooks) {
                     System.out.println(book);
                 }
                 System.out.println();
             } else if (input.equalsIgnoreCase("e")) {
-                Bookshop.search();
+                Bookshop.search("");
             } else if (input.equalsIgnoreCase("f")) {
                 Bookshop.filter();
             } else if (input.equalsIgnoreCase("a")) {
@@ -170,11 +153,34 @@ public class Structure { // structure for the program
         }
     }
 
-    public static void addBookToUserReadingList(Book book) throws IOException {
-        BufferedWriter writer = Helper.getWriter(User.getCurrentUser() + ".csv", StandardOpenOption.APPEND);
-        writer.write(book.toCSV());
-        writer.newLine();
-        writer.close();
+    public static void choiceUserList() throws Throwable {
+        Scanner scan = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("Reader list");
+            System.out.println("Sort [s] / search [e] / filter [f] / remove [r] / exit [x]");
+
+            String input = scan.nextLine();
+            if (input.equals("x")) {
+                break;
+            } else if (input.equalsIgnoreCase("s")) {
+                ArrayList<Book> sortedBooks =  Bookshop.sortAllBooks(User.getCurrentUser());
+                for (Book book : sortedBooks) {
+                    System.out.println(book);
+                }
+                System.out.println();
+            } else if (input.equalsIgnoreCase("e")) {
+                Bookshop.search(User.getCurrentUser());
+            } else if (input.equalsIgnoreCase("f")) {
+                Bookshop.filter();
+            } else if (input.equalsIgnoreCase("r")) {
+                Structure.removeBook();
+            } else if (input.equalsIgnoreCase("x")) {
+                break;
+            } else {
+                System.out.println("Invalid input.");
+            }    
+        }
     }
 
     public static void addBook() throws Exception {
@@ -218,6 +224,10 @@ public class Structure { // structure for the program
             }
         }
             
+    }
+
+    public static void removeBook() {
+
     }
 
 }

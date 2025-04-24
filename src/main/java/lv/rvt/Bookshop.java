@@ -79,7 +79,7 @@ public class Bookshop {
         writer.close();
     }
 
-    public static void search() throws Exception { // serach for name or author
+    public static void search(String user) throws Exception { // serach for name or author
         Scanner scan = new Scanner(System.in);
         System.out.println("Search by book name [1], author [2] or both [3]: ");
 
@@ -98,7 +98,19 @@ public class Bookshop {
         String search =  scan.nextLine();
 
         ArrayList<Book> searchBook = new ArrayList<>();
-        BufferedReader reader = Helper.getReader("books.csv");
+        BufferedReader reader;
+
+        while (true) {
+            if (user.equals("")) {
+                BufferedReader bookReader = Helper.getReader("books.csv");
+                reader = bookReader;
+                break;
+            } else {
+                BufferedReader bookReader = Helper.getReader(User.getCurrentUser() + ".csv");
+                reader = bookReader;
+                break;
+            }
+        }
 
         String line;
         reader.readLine();
@@ -129,25 +141,37 @@ public class Bookshop {
         } 
     }
 
-    public static ArrayList<Book> sortAllBooks() throws Throwable { // change in what order everything is displayed
+    public static ArrayList<Book> sortAllBooks(String user) throws Throwable { // change in what order everything is displayed
 
         ArrayList<String> sortedList = new ArrayList<>();
-        BufferedReader reader = Helper.getReader("books.csv");
+        BufferedReader reader;
+
+        while (true) {
+            if (user.equals("")) {
+                BufferedReader bookReader = Helper.getReader("books.csv");
+                reader = bookReader;
+                break;
+            } else {
+                BufferedReader bookReader = Helper.getReader(User.getCurrentUser() + ".csv");
+                reader = bookReader;
+                break;
+            }
+        }
 
         Scanner scan = new Scanner(System.in);
         System.out.println("Sort by book name [1], author [2], price [3] or year [4]: ");
         String input = null;
 
-        while (true) { // Checks if input is 1 or 2
+        while (true) { // Checks if input is 1/2/3/4
             String enter =  scan.nextLine();
             if (enter.equals("1") || enter.equals("2")) {
                 input = enter;
                 break;
             } if (enter.equals("3")) {
-                ArrayList<Book> books = sortByPrice();
+                ArrayList<Book> books = sortByPrice(user);
                 return books;
             } if (enter.equals("4")) {
-                ArrayList<Book> books = sortByYear();
+                ArrayList<Book> books = sortByYear(user);
                 return books;
             }
             else { 
@@ -185,9 +209,21 @@ public class Bookshop {
         return null;
     }
 
-    public static ArrayList<Book> sortByPrice() throws Exception { //similar to sortAllBooks but does it by price instead
-        BufferedReader reader = Helper.getReader("books.csv");
+    public static ArrayList<Book> sortByPrice(String user) throws Exception { //similar to sortAllBooks but does it by price instead
+        BufferedReader reader;
         ArrayList<Double> sortedList = new ArrayList<>();
+
+        while (true) {
+            if (user.equals("")) {
+                BufferedReader bookReader = Helper.getReader("books.csv");
+                reader = bookReader;
+                break;
+            } else {
+                BufferedReader bookReader = Helper.getReader(User.getCurrentUser() + ".csv");
+                reader = bookReader;
+                break;
+            }
+        }
 
         String line;
         reader.readLine();
@@ -218,9 +254,26 @@ public class Bookshop {
         } return null;
     }
 
-    public static ArrayList<Book> sortByYear() throws Throwable {
-        BufferedReader reader = Helper.getReader("books.csv");
+    public static ArrayList<Book> sortByYear(String user) throws Throwable {
+        BufferedReader reader;
+        ArrayList<Book> ogList;
         ArrayList<Integer> sortedList = new ArrayList<>();
+
+        while (true) {
+            if (user.equals("")) {
+                BufferedReader bookReader = Helper.getReader("books.csv");
+                ArrayList<Book> bookList = allBooks();
+                ogList = bookList;
+                reader = bookReader;
+                break;
+            } else {
+                BufferedReader bookReader = Helper.getReader(User.getCurrentUser() + ".csv");
+                ArrayList<Book> bookList = allUserBooks();
+                ogList = bookList;
+                reader = bookReader;
+                break;
+            }
+        }
 
         String line;
         reader.readLine();
@@ -230,7 +283,6 @@ public class Bookshop {
         }
 
         Collections.sort(sortedList); // Sorts by hihghest number
-        ArrayList<Book> ogList = allBooks();
         ArrayList<Book> bookList = new ArrayList<>();
 
         ArrayList<Integer> sortedListWithoutDuplicates = (ArrayList<Integer>) sortedList.stream().distinct().collect(Collectors.toList()); // removes duplicates from sortedList
@@ -254,8 +306,8 @@ public class Bookshop {
     public static String sortDirection() { // Checks how to display the sorted list 
         Scanner scan = new Scanner(System.in);
         System.out.println("In ascending [A-Z] or descending [Z-A] order.");
-        System.out.println("A - ascending");
-        System.out.println("D - descending");
+        System.out.println("A - ascending ↑");
+        System.out.println("D - descending ↓");
 
         while (true) { // Checks if input is a/A or d/D
             String enter =  scan.nextLine();

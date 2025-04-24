@@ -16,18 +16,18 @@ Assign roles to users:
 Reading list
 
 action/choices in order:
-    login/register: 
-        username & email
+    login/register: +
+        username & email +
         if regular user:
             see all books:
-                sort
+                sort +
                 filter
-                search
-                add
+                search +
+                add +
             see your booklist:
-                sort
-                filter
-                search
+                sort +
+                filter 
+                search +
                 remove
             exit
         if admin:
