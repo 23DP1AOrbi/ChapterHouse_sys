@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import lv.rvt.roles.User;
 
-public class Structure { // structure for the program
+public class Structure extends Bookshop { // structure for the program
 
     public static void start() throws Throwable{  // initial terminal
         Scanner scan = new Scanner(System.in);
@@ -27,7 +27,6 @@ public class Structure { // structure for the program
     
                 else if (input.equalsIgnoreCase("show")) {
                     show();
-                    // choiceAllBooks();
                 }
     
                 else if (input.equalsIgnoreCase("help")) {
@@ -65,7 +64,7 @@ public class Structure { // structure for the program
             if ((!SYSTEM) ) {   
                 SYSTEMCHECK = true;
             } else if (SYSTEM == true && SYSTEMCHECK == true) { // if user didn't exit immediately & if the extra check neccessity was , goes back to user entry part
-                boolean CHECK = Bookshop.entry();
+                boolean CHECK = entry();
                 SYSTEMCHECK = CHECK;
             }
             
@@ -86,7 +85,6 @@ public class Structure { // structure for the program
 
     public static void instructions(){ // instruction output
         System.out.println("help - show what the commands do");
-        System.out.println("filter - filter books and sort with differing criteria");
         System.out.println("show - show list of books");
         System.out.println("stop - end program");
     }
@@ -100,7 +98,7 @@ public class Structure { // structure for the program
         while (true) {
             String input = scan.nextLine();
             if (input.equalsIgnoreCase("a")) {
-                ArrayList<Book> books = Bookshop.allBooks();
+                ArrayList<Book> books = BookManager.allBooks();
                 for (Book book : books) {
                     System.out.println(book);
                 }
@@ -108,7 +106,7 @@ public class Structure { // structure for the program
                 choiceAllBooks();
                 break;
             } else if (input.equalsIgnoreCase("l")) {
-                ArrayList<Book> books = Bookshop.allUserBooks();
+                ArrayList<Book> books = BookManager.allUserBooks();
                 for (Book book : books) {
                     System.out.println(book);
                 }
@@ -142,7 +140,7 @@ public class Structure { // structure for the program
             } else if (input.equalsIgnoreCase("e")) {
                 Bookshop.search("");
             } else if (input.equalsIgnoreCase("f")) {
-                Bookshop.filter();
+                Bookshop.filter("");
             } else if (input.equalsIgnoreCase("a")) {
                 Structure.addBook();
             } else if (input.equalsIgnoreCase("x")) {
@@ -172,7 +170,7 @@ public class Structure { // structure for the program
             } else if (input.equalsIgnoreCase("e")) {
                 Bookshop.search(User.getCurrentUser());
             } else if (input.equalsIgnoreCase("f")) {
-                Bookshop.filter();
+                Bookshop.filter(User.getCurrentUser());
             } else if (input.equalsIgnoreCase("r")) {
                 Structure.removeBook();
             } else if (input.equalsIgnoreCase("x")) {
@@ -185,8 +183,8 @@ public class Structure { // structure for the program
 
     public static void addBook() throws Exception {
         Scanner scan = new Scanner(System.in);
-        ArrayList<Book> books = Bookshop.allBooks();
-        ArrayList<Book> userBooks = Bookshop.allUserBooks();
+        ArrayList<Book> books = BookManager.allBooks();
+        ArrayList<Book> userBooks = BookManager.allUserBooks();
 
         String bookId;
         while (true) { 
