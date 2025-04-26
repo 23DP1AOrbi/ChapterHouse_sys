@@ -21,14 +21,14 @@ action/choices in order:
         if regular user:
             see all books:
                 sort +
-                filter
+                filter +
                 search +
                 add +
             see your booklist:
                 sort +
-                filter 
+                filter +
                 search +
-                remove
+                remove +
             exit
         if admin:
             see all books:

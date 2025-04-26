@@ -33,6 +33,10 @@ public class Book {
         return this.name;
     }
 
+    public void setId(int newId) {
+        this.id = newId;
+    }
+
     public String getAuthor() {
         return this.author;
     }
