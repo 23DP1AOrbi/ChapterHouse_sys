@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 
 
 public class Bookshop {
+    private static String lastSortMode = "5";
+    private static String lastSortDirection = "a";
     
 
     public static ArrayList<User> allUsers() throws Exception {
@@ -36,9 +38,9 @@ public class Bookshop {
         writer.close();
     }
 
-    public static void addBookToUserReadingList(Book book) throws IOException {
-        BufferedWriter writer = Helper.getWriter(User.getCurrentUser() + ".csv", StandardOpenOption.APPEND);
-        writer.write(book.toCSV());
+    public static void addBookToUserReadingList(UserBook selectedBook) throws IOException {
+        BufferedWriter writer = Helper.getWriter("users/" + User.getCurrentUser() + ".csv", StandardOpenOption.APPEND);
+        writer.write(selectedBook.toCSV());
         writer.newLine();
         writer.close();
     }
@@ -50,7 +52,7 @@ public class Bookshop {
         writer.close();
     }
 
-    public static void search(String user, ArrayList<Book> givenBooks) throws Throwable { // serach for name or author
+    public static void search(ArrayList<Book> givenBooks) throws Throwable { // serach for name or author
         Scanner scan = new Scanner(System.in);
         System.out.println("Search by book name [1], author [2] or both [3]: ");
 
@@ -94,7 +96,7 @@ public class Bookshop {
             System.out.println("Matching results: " + searchBook.size());
             System.out.println();
 
-            while (user.equals("")) {
+            while (true) {
                 System.out.println("add [a] / exit [x] / sort [s]");
                 String choice = scan.nextLine();
                 if (choice.equalsIgnoreCase("x")) {
@@ -102,7 +104,7 @@ public class Bookshop {
                 } else if (choice.equalsIgnoreCase("a")) {
                     Structure.addBook(searchBook);
                 } else if (choice.equalsIgnoreCase("s")) {
-                    ArrayList<Book> sortedSearch = Bookshop.sortAllBooks(user, searchBook);
+                    ArrayList<Book> sortedSearch = Bookshop.sortAllBooks(searchBook);
                     for (Book book : sortedSearch) {
                         System.out.println(book.toString());
                     }
@@ -115,39 +117,45 @@ public class Bookshop {
         
     }
 
-    public static ArrayList<Book> sortAllBooks(String user, ArrayList<Book> unsortedBooks) throws Throwable { // change in what order everything is displayed
+    public static ArrayList<Book> sortAllBooks(ArrayList<Book> unsortedBooks) throws Throwable  { // change in what order everything is displayed
 
         ArrayList<String> sortedList = new ArrayList<>();
-        BufferedReader reader;
+        BufferedReader reader = Helper.getReader("books.csv");
 
-        
-            if (user.equals("")) {
-                BufferedReader bookReader = Helper.getReader("books.csv");
-                reader = bookReader;
-            } else {
-                BufferedReader bookReader = Helper.getReader(User.getCurrentUser() + ".csv");
-                reader = bookReader;
-            }
-        
 
         Scanner scan = new Scanner(System.in);
-        System.out.println("Sort by book name [1], author [2], price [3] or year [4]: ");
+        System.out.println("Sort by");
+        System.out.println("name [1] / author [2] / price [3] / year [4] / id [5]");
         String input;
-
-        while (true) { // Checks if input is 1/2/3/4
+        while (true) {
             String enter =  scan.nextLine();
             if (enter.equals("1") || enter.equals("2")) {
                 input = enter;
+                lastSortMode = enter;
                 break;
             } if (enter.equals("3")) {
-                ArrayList<Book> books = sortByPrice(user, unsortedBooks);
-                return books;
+                lastSortMode = enter;
+                String order = sortDirection();
+                lastSortDirection = order;
+                ArrayList<Book> books = sortByPrice(unsortedBooks, order);
+                    return books;
             } if (enter.equals("4")) {
-                ArrayList<Book> books = sortByYear(user, unsortedBooks);
+                lastSortMode = enter;
+                String order = sortDirection();
+                lastSortDirection = order;
+                ArrayList<Book> books = sortByYear(unsortedBooks, order);
+                return books;
+            } if (enter.equals("5")) {
+                lastSortMode = enter;
+                String order = sortDirection();
+                lastSortDirection = order;
+                System.out.println(lastSortDirection);
+                ArrayList<Book> books = sortByID(unsortedBooks, order);
                 return books;
             }
             else { 
-                System.out.println("Input has to be book name [1], author [2], price [3] or year [4].");
+                System.out.println("Invalid input.");
+                System.out.println("name [1] / author [2] /price [3] / year [4] / id [5]");
              }
         }
 
@@ -169,30 +177,51 @@ public class Bookshop {
                 }
             }
         }
-
         String order = sortDirection();
-        if (order.equalsIgnoreCase("a")) {
-            return bookList;
-        } else if (order.equalsIgnoreCase("d")) { // returns the same list reversed
+        lastSortDirection = order;
+        // returns the same list reversed
+        if (order.equalsIgnoreCase("d")) { 
             Collections.reverse(bookList);
-            return bookList;
         }
-        return null;
+        return bookList;
     }
 
-    public static ArrayList<Book> sortByPrice(String user, ArrayList<Book> unsortedBooks) throws Exception { //similar to sortAllBooks but does it by price instead
-        BufferedReader reader;
-        ArrayList<Double> sortedList = new ArrayList<>();
+    public static ArrayList<Book> applyLastSort(ArrayList<Book> givenBooks) throws Throwable {
+        if (lastSortMode.equals("3")) {
+            return sortByPrice(givenBooks, lastSortDirection);
+        } else if (lastSortMode.equals("4")) {
+            return sortByYear(givenBooks, lastSortDirection);
+        } else if (lastSortMode.equals("5")) {
+            return sortByID(givenBooks, lastSortDirection);
+        } else {
 
-       
-            if (user.equals("")) {
-                BufferedReader bookReader = Helper.getReader("books.csv");
-                reader = bookReader;
-            } else {
-                BufferedReader bookReader = Helper.getReader(User.getCurrentUser() + ".csv");
-                reader = bookReader;
+            ArrayList<String> sortedList = new ArrayList<>();
+            BufferedReader reader = Helper.getReader("books.csv");
+            reader.readLine();
+            
+            for (String line; (line = reader.readLine()) != null;) {
+                String[] parts = line.split(",");
+                sortedList.add(parts[Integer.parseInt(lastSortMode)]);
             }
-        
+            Collections.sort(sortedList);
+            ArrayList<Book> sortedBooks = new ArrayList<>();
+            for (String sortedItem : sortedList) {
+                for (Book book : givenBooks) {
+                    if (book.getName().equals(sortedItem) || book.getAuthor().equals(sortedItem)) {
+                        sortedBooks.add(book);
+                    }
+                }
+            }
+            if (lastSortDirection.equalsIgnoreCase("d")) {
+                Collections.reverse(sortedBooks);
+            }
+            return sortedBooks;
+        }
+    }
+
+    public static ArrayList<Book> sortByPrice(ArrayList<Book> unsortedBooks, String order) throws Exception { //similar to sortAllBooks but does it by price instead
+        BufferedReader reader = Helper.getReader("books.csv");
+        ArrayList<Double> sortedList = new ArrayList<>();
 
         String line;
         reader.readLine();
@@ -213,33 +242,15 @@ public class Bookshop {
                 }
             }
         }
-
-        String order = sortDirection(); // gets how to display the list
-        if (order.equalsIgnoreCase("a")) {
-            return bookList;
-        } else if (order.equalsIgnoreCase("d")) { // returns the same list reversed
+        if (order.equalsIgnoreCase("d")) {
             Collections.reverse(bookList);
-            return bookList;
-        } return null;
+        }
+        return bookList;
     }
 
-    public static ArrayList<Book> sortByYear(String user, ArrayList<Book> unsortedBooks) throws Throwable {
-        BufferedReader reader;
+    public static ArrayList<Book> sortByYear(ArrayList<Book> unsortedBooks, String order) throws Throwable {
+        BufferedReader reader = Helper.getReader("books.csv");
         ArrayList<Integer> sortedList = new ArrayList<>();
-
-        
-            if (user.equals("")) {
-                BufferedReader bookReader = Helper.getReader("books.csv");
-                // ArrayList<Book> bookList = BookManager.allBooks();
-                // ogList = bookList;
-                reader = bookReader;
-            } else {
-                BufferedReader bookReader = Helper.getReader(User.getCurrentUser() + ".csv");
-                // ArrayList<Book> bookList = BookManager.allUserBooks();
-                // ogList = bookList;
-                reader = bookReader;
-            }
-        
 
         String line;
         reader.readLine();
@@ -260,14 +271,35 @@ public class Bookshop {
                 }
             }
         }
-
-        String order = sortDirection(); // gets how to display the list
-        if (order.equalsIgnoreCase("a")) {
-            return bookList;
-        } else if (order.equalsIgnoreCase("d")) { // returns the same list reversed
+        if (order.equalsIgnoreCase("d")) {
             Collections.reverse(bookList);
-            return bookList;
-        } return null;
+        }
+        return bookList;
+    }
+
+    public static ArrayList<Book> sortByID(ArrayList<Book> givenBooks, String order) throws Throwable { 
+        ArrayList<Book> sortedList = new ArrayList<>();
+
+        ArrayList<Book> allBooks = BookManager.allBooks();
+
+        int highestID = 0;
+        for (Book book : givenBooks) {
+            if (book.getId() > highestID) {
+                highestID = book.getId();
+            }
+        }
+
+        for (int i = 1; i <= highestID; i++) {
+            for (Book userBook : allBooks) {
+                if (userBook.getId() == i) {
+                    sortedList.add(userBook);
+                }
+            }
+        } 
+        if (order.equalsIgnoreCase("d")) {
+            Collections.reverse(sortedList);
+        }
+        return sortedList;
     }
 
     public static String sortDirection() { // Checks how to display the sorted list 
@@ -301,14 +333,12 @@ public class Bookshop {
         genreFilters.put("Non-Fiction", true);
     }
 
-    public static ArrayList<Book> filter(String user, ArrayList<Book> givenBooks) throws Exception { // choose restrictions for displayed books
+    public static ArrayList<Book> filterAllBooks(ArrayList<Book> givenBooks) throws Exception { // choose restrictions for displayed books
         
         Scanner scan = new Scanner(System.in);
         ArrayList<Book> filteredBookList = new ArrayList<>();
 
-
             String input;
-            
             while (true) {
                 System.out.println("Add [a] / remove [r] / exit [x]");
 
@@ -347,97 +377,35 @@ public class Bookshop {
                         }
                     }
 
-                    ArrayList<Book> allBooks;
-                    if (user.equals("")) {
-                        ArrayList<Book> allBookshopBooks = BookManager.allBooks();
-                        allBooks = allBookshopBooks;
-                    } else {
-                        ArrayList<Book> allUserBooks = BookManager.allUserBooks();
-                        allBooks = allUserBooks;
-                    }
-
-
-                    
+                    ArrayList<Book> allBooks = BookManager.allBooks();
                     ArrayList<Book> filteredBooks = new ArrayList<>();
                     for (Book book : allBooks) {
                         boolean genreEnabled = genreFilters.getOrDefault(book.getGenre(), false);
-                    
                         if (genreEnabled) {
-                            // for (Book givenBook : givenBooks) {
-                            //     if (givenBook.getGenre().equals(book.getGenre())) {
-                                    filteredBooks.add(book);
-                                    // break;
-                                // }
+                                filteredBooks.add(book);
                             }
                         }
-                    // }
-                    // for (Book book : allBooks) {
-                    //     if (genreFilters.get("Fantasy")) {
-                    //         for (Book givenBook : givenBooks) {
-                    //             if (givenBook.getName().equals(book.getName())) {
-                    //                 filteredBooks.add(book);
-                    //                 break;
-                    //             }
-                    //         }
-                    //     } else if (genreFilters.get("Romance")) {
-                    //         for (Book givenBook : givenBooks) {
-                    //             if (givenBook.getName().equals(book.getName())) {
-                    //                 filteredBooks.add(book);
-                    //                 break;
-                    //             }
-                    //         }
-                    //     } else if (genreFilters.get("Dystopian")) {
-                    //         for (Book givenBook : givenBooks) {
-                    //             if (givenBook.getName().equals(book.getName())) {
-                    //                 filteredBooks.add(book);
-                    //                 break;
-                    //             }
-                    //         }
-                    //     } else if (genreFilters.get("Contemporary Fiction")) {
-                    //         for (Book givenBook : givenBooks) {
-                    //             if (givenBook.getName().equals(book.getName())) {
-                    //                 filteredBooks.add(book);
-                    //                 break;
-                    //             }
-                    //         }
-                    //     } else if (genreFilters.get("Historical Fiction")) {
-                    //         for (Book givenBook : givenBooks) {
-                    //             if (givenBook.getName().equals(book.getName())) {
-                    //                 filteredBooks.add(book);
-                    //                 break;
-                    //             }
-                    //         }
-                    //     } else if (genreFilters.get("Non-Fiction")) {
-                    //         for (Book givenBook : givenBooks) {
-                    //             if (givenBook.getName().equals(book.getName())) {
-                    //                 filteredBooks.add(book);
-                    //                 break;
-                    //             }
-                    //         }
-                    //     }
-                        
-                    // }
 
-                // System.out.println(genreFilters.get("Fantasy") + " " + genreFilters.get("Romance") + " " + genreFilters.get("Dystopian") + " " 
-                // + genreFilters.get("Contemporary Fiction") + " " + genreFilters.get("Historical Fiction") + " " + genreFilters.get("Non-Fiction"));
-                // ArrayList<Book> filteredBooks = new ArrayList<>();
-                // for (Book book : givenBooks) {
-              
-
-                for (Book book : filteredBooks) {
-                    if (genreFilters.getOrDefault(book.getGenre(), false)) {
-                        System.out.println(book.toString());
-  
-                    } 
-                }
                 filteredBookList = filteredBooks;
-                // System.out.println(filteredBooks);
             } else {
                 System.out.println("Invalid input.");
             }
         }
         return filteredBookList;
     } 
+
+    public static ArrayList<Book> applyLastGenreFilter(ArrayList<Book> givenBooks) {
+        ArrayList<Book> filteredBooks = new ArrayList<>();
+    
+        for (Book book : givenBooks) {
+            boolean genreEnabled = genreFilters.getOrDefault(book.getGenre(), false);
+            if (genreEnabled) {
+                filteredBooks.add(book);
+            }
+        }
+    
+        return filteredBooks;
+    }
 
     public static boolean entry() throws Exception {
         Scanner scan = new Scanner(System.in);
@@ -598,12 +566,12 @@ public class Bookshop {
                 System.out.println("New user added");
 
                 // make new file to store added books
-                File file = new File("/workspaces/Eksamens_praktiskais/data/"+ user.getName() +".csv");
+                File file = new File("/workspaces/Eksamens_praktiskais/data/users/"+ user.getName() +".csv");
                 file.createNewFile();
 
-                BufferedWriter writer = Helper.getWriter(user.getName()+".csv", StandardOpenOption.APPEND);
+                BufferedWriter writer = Helper.getWriter("users/" + user.getName()+".csv", StandardOpenOption.APPEND);
 
-                writer.write("Id,Name,Author,Year,Genre,Price (EUR)");
+                writer.write("Id,Name,Author,Year,Genre,Price (EUR),Finished reading");
                 writer.newLine();
                 writer.close();
                 return true;
@@ -628,4 +596,5 @@ public class Bookshop {
         }
         return QUIT;
     }
+
 }
