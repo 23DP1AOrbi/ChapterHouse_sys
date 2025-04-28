@@ -384,6 +384,9 @@ public class Bookshop {
                         if (genreEnabled) {
                                 filteredBooks.add(book);
                             }
+                        } filteredBooks = Bookshop.applyLastGenreFilter(filteredBooks);
+                        for (Book filteredBook : filteredBooks) {
+                            System.out.println(filteredBook.toString());
                         }
 
                 filteredBookList = filteredBooks;

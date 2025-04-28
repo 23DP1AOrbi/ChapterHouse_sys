@@ -22,7 +22,6 @@ public class Structure extends Bookshop { // structure for the program
             boolean SYSTEM = Bookshop.entry();
             String currentUser = User.getCurrentUser();
 
-            System.out.println(User.getCurrentUser());
             while (SYSTEM) {
 
                 show(books);
@@ -64,24 +63,15 @@ public class Structure extends Bookshop { // structure for the program
             if (input.equalsIgnoreCase("x")) {
                 break;
             } else if (input.equalsIgnoreCase("a")) {
-                // ArrayList<Book> books = BookManager.allBooks();
-                // for (Book book : books) {
-                //     System.out.println(book);
-                // }
                 System.out.println();
                 choiceAllBooks();
-                // break;
             } else if (input.equalsIgnoreCase("l")) {
                 ArrayList<UserBook> books = BookManager.allUserBooks();
                 if (books.size() == 0) {
                     System.out.println("Empty reading list.");
                 } else {
-                    // for (UserBook book : books) {
-                    //     System.out.println(book);
-                    // }
                     System.out.println();
                     choiceUserList();
-                    // break;
                 }
             } else {
                 System.out.println("Invalid input.");
@@ -128,7 +118,8 @@ public class Structure extends Bookshop { // structure for the program
         ArrayList<UserBook> books = BookManager.allUserBooks();
 
         while (true) {
-            // ArrayList<UserBook> books = userBooks;
+            books = BookshopUserList.applyLastSortForUser(books);
+            books = BookshopUserList.applyLastGenreFilterForUser(books);
             System.out.println("Reader list");
             for (UserBook book : books) {
                 System.out.println(book.toString());
@@ -139,13 +130,13 @@ public class Structure extends Bookshop { // structure for the program
             if (input.equals("x")) {
                 break;
             } else if (input.equalsIgnoreCase("s")) {
-                books = BookshopUserList.sortAllUserBooks(books);
+                books = BookshopUserList.sortAllUserBooks(books, "");
             } else if (input.equalsIgnoreCase("e")) {
                 BookshopUserList.searchUserBooks(books);
             } else if (input.equalsIgnoreCase("f")) {
                 books = BookshopUserList.filterForUserBooks(books);
             } else if (input.equalsIgnoreCase("r")) {
-                books = Structure.removeBook("/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + ".csv", books);
+                books = Structure.removeBook("/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + ".csv", books, "");
             } else if (input.equalsIgnoreCase("c")) {
                 books = Structure.changeBookReadingStatus("/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + ".csv", books);
             } else if (input.equalsIgnoreCase("x")) {
@@ -194,11 +185,15 @@ public class Structure extends Bookshop { // structure for the program
             }
         }
 
-        //Check if book already exists in user's list (based on name and author)
+        //Check if book already exists in user's list
         boolean alreadyExists = false;
         for (Book userBook : userBooks) {
+            // if (userBooks.equals(selectedBook)) {
+                
+            
             if (userBook.getName().equals(selectedBook.getName()) && userBook.getAuthor().equals(selectedBook.getAuthor())) {
                 alreadyExists = true;
+                System.out.println("howw did we get here");
                 break;
             }
         }
@@ -215,8 +210,8 @@ public class Structure extends Bookshop { // structure for the program
         }
     }
 
-    public static ArrayList<UserBook> removeBook(String filePath, ArrayList<UserBook> givenBooks) throws Exception {
-        String tempFile = "/workspaces/Eksamens_praktiskais/data/" + User.getCurrentUser() + "Temp.csv";
+    public static ArrayList<UserBook> removeBook(String filePath, ArrayList<UserBook> givenBooks, String start) throws Exception {
+        String tempFile = "/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + "Temp.csv";
         File oldReadingList = new File(filePath);
         File newReadingList = new File(tempFile);
         
@@ -224,6 +219,7 @@ public class Structure extends Bookshop { // structure for the program
         ArrayList<UserBook> modifiedBooks = new ArrayList<>();
 
         int deleteLine = -1;
+         String deletedBook = "";
 
         while (true) {
             System.out.print("Enter ID to remove: ");
@@ -234,6 +230,7 @@ public class Structure extends Bookshop { // structure for the program
                 for (UserBook book : givenBooks) {
                     if (id == book.getId()) {
                         deleteLine = id;
+                        deletedBook = book.getName();
                         NOMATCH = false;
                         break;
                     }
@@ -270,21 +267,27 @@ public class Structure extends Bookshop { // structure for the program
             writer.flush();
             writer.close();
             reader.close();
-            // String wait = scan.nextLine();
 
             oldReadingList.delete();
             newReadingList.renameTo(oldReadingList);
             System.out.println("Book removed successfully.");
 
             // from the given list removes the removed book 
-            int i = 1;
-            System.out.println(deleteLine);
-            for (UserBook book : givenBooks) {
-                if (book.getId() != deleteLine) {
-                    book.setId(i);
-                    modifiedBooks.add(book);
-                    i++;
+            if (start.equalsIgnoreCase("search")) {
+                for (UserBook book : givenBooks) {
+                    if (book.getId() != deleteLine) {
+                        modifiedBooks.add(book);
+                    }
                 }
+                return modifiedBooks;
+            }
+
+            ArrayList<UserBook> revampBooks = BookManager.allUserBooks();
+            for (UserBook book : revampBooks) {
+                if (book.getName().equals(deletedBook)) {
+                    continue;
+                }
+                modifiedBooks.add(book);
             }
 
         } catch (Exception e) {
@@ -295,7 +298,7 @@ public class Structure extends Bookshop { // structure for the program
     }
 
     public static ArrayList<UserBook> changeBookReadingStatus(String filePath, ArrayList<UserBook> givenBooks) {
-        String tempFile = "/workspaces/Eksamens_praktiskais/data/" + User.getCurrentUser() + "Temp.csv";
+        String tempFile = "/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + "Temp.csv";
         File oldReadingList = new File(filePath);
         File newReadingList = new File(tempFile);
         
@@ -348,7 +351,6 @@ public class Structure extends Bookshop { // structure for the program
             writer.flush();
             writer.close();
             reader.close();
-            // String wait = scan.nextLine();
 
             oldReadingList.delete();
             newReadingList.renameTo(oldReadingList);
@@ -372,18 +374,12 @@ public class Structure extends Bookshop { // structure for the program
                     }
                 }
 
-            } else { 
-                for (UserBook book : givenBooks) {
-                    if (book.getId() != modifyStatusID) {
-                        modifiedBooks.add(book);
-                    } else {
-                        book.setReadingStatus(!modifiedBookOriginalStatus);
-                        modifiedBooks.add(book);
-                    }
-                    
+            } else {
+                ArrayList<UserBook> newBookList = BookManager.allUserBooks();
+                for (UserBook book : newBookList) {
+                    modifiedBooks.add(book);
                 }
             }
-
         } catch (Exception e) {
             System.out.println(e);
         }
