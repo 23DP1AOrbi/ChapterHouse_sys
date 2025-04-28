@@ -1,16 +1,26 @@
 package lv.rvt;
 
+import static lv.rvt.Bookshop.genreFilters;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import lv.rvt.roles.User;
+import lv.rvt.bookManaging.Book;
+import lv.rvt.bookManaging.BookManager;
+import lv.rvt.bookManaging.UserBook;
+import lv.rvt.user.User;
 
 public class Structure extends Bookshop { // structure for the program
+
+
 
     public static void start() throws Throwable{  // initial terminal
         Scanner scan = new Scanner(System.in);
@@ -82,14 +92,21 @@ public class Structure extends Bookshop { // structure for the program
     public static void choiceAllBooks() throws Throwable {
         Scanner scan = new Scanner(System.in);
         ArrayList<Book> books = BookManager.allBooks();
+        String message = "";
 
         while (true) {
-            System.out.println("All books");
+            clearScreen();
             books = Bookshop.applyLastSort(books);
             books = Bookshop.applyLastGenreFilter(books);
-            for (Book book : books) {
-                System.out.println(book.toString());
+            // for (Book book : books) {
+            //     System.out.println(book.toString());
+            // }
+            tableFormatAll(books);
+            if (!message.equals("")) {
+                System.out.println(message);
             }
+            
+            message = "";
             System.out.println("Sort [s] / search [e] / filter [f] / add [a] / exit [x]");
 
             String input = scan.nextLine();
@@ -97,13 +114,13 @@ public class Structure extends Bookshop { // structure for the program
             if (input.equals("x")) {
                 break;
             } else if (input.equalsIgnoreCase("s")) {
-                books = Bookshop.sortAllBooks(books);
+                books = Bookshop.sortAllBooks(books, "");
             } else if (input.equalsIgnoreCase("e")) {
                 Bookshop.search(books);
             } else if (input.equalsIgnoreCase("f")) {
                 books = Bookshop.filterAllBooks(books);
             } else if (input.equalsIgnoreCase("a")) {
-                Structure.addBook(books);
+                message = Structure.addBook(books);
             } else if (input.equalsIgnoreCase("x")) {
                 break;
             } else {
@@ -116,15 +133,38 @@ public class Structure extends Bookshop { // structure for the program
     public static void choiceUserList() throws Throwable { // ADDD so that sorting and filters stay
         Scanner scan = new Scanner(System.in);
         ArrayList<UserBook> books = BookManager.allUserBooks();
+        for (UserBook userBook : books) {
+            System.out.println(userBook.toString());
+        }
 
         while (true) {
+            clearScreen();
+            // Double totalPrice = 0.0;
+            System.out.println("Reader list");
+            
+            // applies all the previous sorts and filters
             books = BookshopUserList.applyLastSortForUser(books);
             books = BookshopUserList.applyLastGenreFilterForUser(books);
-            System.out.println("Reader list");
-            for (UserBook book : books) {
-                System.out.println(book.toString());
-            }
-            System.out.println("Sort [s] / search [e] / filter [f] / remove [r] / change status [c] / exit [x]");
+            // for (UserBook book : books) {
+            //     totalPrice += book.getPrice();
+            // } 
+            tableFormatUser(books);
+            
+            
+            // BigDecimal roundedTotal = new BigDecimal(totalPrice);
+            // MathContext precision = null;
+            // // changes precision according to the total sum
+            // if (totalPrice < 10) {
+            //     precision = new MathContext(3);
+            // } else if (totalPrice < 100) {
+            //     precision = new MathContext(4);
+            // } else if (totalPrice > 100) {
+            //     precision = new MathContext(5);
+            // }
+             
+            // roundedTotal = roundedTotal.round(precision);
+            // System.out.println(roundedTotal);
+            System.out.println("Sort [s] / search [e] / filter [f] / remove [r] / reset [t] / change status [c] / exit [x]");
 
             String input = scan.nextLine();
             if (input.equals("x")) {
@@ -144,10 +184,11 @@ public class Structure extends Bookshop { // structure for the program
             } else {
                 System.out.println("Invalid input.");
             }   
+            
         }
     }
 
-    public static void addBook(ArrayList<Book> givenBooks) throws Exception {
+    public static String addBook(ArrayList<Book> givenBooks) throws Exception {
         Scanner scan = new Scanner(System.in);
         ArrayList<UserBook> userBooks = BookManager.allUserBooks();
 
@@ -184,30 +225,23 @@ public class Structure extends Bookshop { // structure for the program
                 break;
             }
         }
-
         //Check if book already exists in user's list
-        boolean alreadyExists = false;
+        // boolean alreadyExists = false;
         for (Book userBook : userBooks) {
-            // if (userBooks.equals(selectedBook)) {
-                
-            
             if (userBook.getName().equals(selectedBook.getName()) && userBook.getAuthor().equals(selectedBook.getAuthor())) {
-                alreadyExists = true;
-                System.out.println("howw did we get here");
-                break;
+                // alreadyExists = true;
+                return "List already includes this book.";
             }
         }
 
-        if (alreadyExists) {
-            System.out.println("List already includes this book.");
-        } else {
-            // Assign next available ID and add to user's reading list
-            selectedBook.setId(userBooks.size() + 1);
-            UserBook userSelectedBook = new UserBook(selectedBook.getId(), selectedBook.getName(), selectedBook.getAuthor(), +
-            selectedBook.getYear(), selectedBook.getGenre(), selectedBook.getPrice(), false);
-            Bookshop.addBookToUserReadingList(userSelectedBook);
-            System.out.println("Book added to reading list.");
-        }
+        // Assign next available ID and add to user's reading list
+        selectedBook.setId(userBooks.size() + 1);
+        UserBook userSelectedBook = new UserBook(selectedBook.getId(), selectedBook.getName(), selectedBook.getAuthor(), +
+        selectedBook.getYear(), selectedBook.getGenre(), selectedBook.getPrice(), false);
+        Bookshop.addBookToUserReadingList(userSelectedBook);
+        System.out.println("Book added to reading list.");
+        return "Book added to reading list.";
+        
     }
 
     public static ArrayList<UserBook> removeBook(String filePath, ArrayList<UserBook> givenBooks, String start) throws Exception {
@@ -363,7 +397,6 @@ public class Structure extends Bookshop { // structure for the program
                     counter++;
                 }
             } 
-            System.out.println(counter);
             if (counter == givenBooks.size() || counter == 0) { // if only read or unread books it gets removed from the return list
                 for (UserBook book : givenBooks) {
                     for (UserBook updatedBook : allBooks) {
@@ -385,4 +418,92 @@ public class Structure extends Bookshop { // structure for the program
         }
         return modifiedBooks;
     }
+
+    public static void clearScreen() {  
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();  
+    }
+
+    public static void tableFormatAll(ArrayList<Book> givenBooks)  {
+        
+        System.out.println("================================================================================================");
+        System.out.printf("%-3s| ", "ID");
+        System.out.printf("%-38s| ", "Book Name");
+        System.out.printf("%-18s| ", "Author");
+        System.out.printf("%-5s| ", "Year");
+        System.out.printf("%-15s| ", "Genre");
+        System.out.printf("%-6s| \n", "Price");
+        System.out.println("================================================================================================");
+        System.out.println("------------------------------------------------------------------------------------------------");
+        for (Book book : givenBooks) {
+            System.out.printf("%-3d| ", book.getId());
+            System.out.printf("%-38s| ", book.getName());
+            System.out.printf("%-18s| ", book.getAuthor());
+            System.out.printf("%-5d| ", book.getYear());
+            System.out.printf("%-15s| ", book.getGenre());
+            System.out.printf("%-6.2f| \n", book.getPrice());
+            System.out.println("------------------------------------------------------------------------------------------------");
+        } 
+        System.out.println("================================================================================================");
+    }
+
+    public static void tableFormatUser(ArrayList<UserBook> givenBooks){
+
+        Double totalPrice = 0.0;
+        int totalYear = 0;
+
+        System.out.println("=========================================================================================================");
+        System.out.printf("| %-3s| ", "ID");
+        System.out.printf("%-38s| ", "Book Name");
+        System.out.printf("%-18s| ", "Author");
+        System.out.printf("%-5s| ", "Year");
+        System.out.printf("%-15s| ", "Genre");
+        System.out.printf("%-6s| ", "Price");
+        System.out.printf("%-5s|\n", "Read");
+        System.out.println("=========================================================================================================");
+        System.out.println("---------------------------------------------------------------------------------------------------------");
+        for (UserBook book : givenBooks) {
+            totalPrice += book.getPrice();
+            totalYear += book.getYear();
+            String status = "";
+            if (book.getReadingStatus() == true) {
+                status = "X";
+            }
+            System.out.printf("| %-3d| ", book.getId());
+            System.out.printf("%-38s| ", book.getName());
+            System.out.printf("%-18s| ", book.getAuthor());
+            System.out.printf("%-5d| ", book.getYear());
+            System.out.printf("%-15s| ", book.getGenre());
+            System.out.printf("%-6.2f|   ", book.getPrice());
+            System.out.printf("%-3s|\n", status);
+            System.out.println("---------------------------------------------------------------------------------------------------------");
+        } 
+        System.out.println("=========================================================================================================");
+
+        BigDecimal roundedTotal = new BigDecimal(totalPrice);
+        BigDecimal yearTotal = new BigDecimal(totalYear);
+        BigDecimal yearAverage = yearTotal.divide(
+            new BigDecimal(givenBooks.size()),
+            0,
+            RoundingMode.HALF_UP
+        );
+
+        MathContext precision = null;
+        // changes precision according to the total sum
+        if (totalPrice < 10) {
+            precision = new MathContext(3);
+        } else if (totalPrice < 100) {
+            precision = new MathContext(4);
+        } else if (totalPrice > 100) {
+            precision = new MathContext(5);
+        } 
+        roundedTotal = roundedTotal.round(precision);
+        
+        System.out.printf("| %13s", "Total Price: ");
+        System.out.printf("%-30s|", roundedTotal.toPlainString());
+        System.out.printf("%51s", "Average Year: ");
+        System.out.printf("%-6s |\n", yearAverage.toPlainString());
+        System.out.println("=========================================================================================================");
+    }
+
 }

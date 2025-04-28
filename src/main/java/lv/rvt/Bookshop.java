@@ -5,8 +5,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.StandardOpenOption;
-import lv.rvt.roles.User;
+
+import lv.rvt.bookManaging.Book;
+import lv.rvt.bookManaging.BookManager;
+import lv.rvt.bookManaging.UserBook;
 import lv.rvt.tools.Helper;
+import lv.rvt.user.User;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,13 +33,6 @@ public class Bookshop {
             users.add(anotherUser);
         }
         return users;
-    }
-
-    public static void addBook(Book book) throws Exception {
-        BufferedWriter writer = Helper.getWriter("books.csv", StandardOpenOption.APPEND);
-        writer.write(book.toCSV());
-        writer.newLine();
-        writer.close();
     }
 
     public static void addBookToUserReadingList(UserBook selectedBook) throws IOException {
@@ -104,20 +101,20 @@ public class Bookshop {
                 } else if (choice.equalsIgnoreCase("a")) {
                     Structure.addBook(searchBook);
                 } else if (choice.equalsIgnoreCase("s")) {
-                    ArrayList<Book> sortedSearch = Bookshop.sortAllBooks(searchBook);
+                    ArrayList<Book> sortedSearch = Bookshop.sortAllBooks(searchBook, "search");
                     for (Book book : sortedSearch) {
                         System.out.println(book.toString());
                     }
-                }
-                else {
+                } else {
                     System.out.println("Invalid input.");
                 }
+                
             }
         } 
         
     }
 
-    public static ArrayList<Book> sortAllBooks(ArrayList<Book> unsortedBooks) throws Throwable  { // change in what order everything is displayed
+    public static ArrayList<Book> sortAllBooks(ArrayList<Book> unsortedBooks, String search) throws Throwable  { // change in what order everything is displayed
 
         ArrayList<String> sortedList = new ArrayList<>();
         BufferedReader reader = Helper.getReader("books.csv");
@@ -131,25 +128,32 @@ public class Bookshop {
             String enter =  scan.nextLine();
             if (enter.equals("1") || enter.equals("2")) {
                 input = enter;
-                lastSortMode = enter;
+                if (!(search.equals("search"))) {
+                    lastSortMode = enter;
+                }
                 break;
             } if (enter.equals("3")) {
-                lastSortMode = enter;
                 String order = sortDirection();
-                lastSortDirection = order;
+                if (!(search.equals("search"))) {
+                    lastSortMode = enter;
+                    lastSortDirection = order;
+                } 
                 ArrayList<Book> books = sortByPrice(unsortedBooks, order);
-                    return books;
+                return books;
             } if (enter.equals("4")) {
-                lastSortMode = enter;
                 String order = sortDirection();
-                lastSortDirection = order;
+                if (!(search.equals("search"))) {
+                    lastSortMode = enter;
+                    lastSortDirection = order;
+                } 
                 ArrayList<Book> books = sortByYear(unsortedBooks, order);
                 return books;
             } if (enter.equals("5")) {
-                lastSortMode = enter;
                 String order = sortDirection();
-                lastSortDirection = order;
-                System.out.println(lastSortDirection);
+                if (!(search.equals("search"))) {
+                    lastSortMode = enter;
+                    lastSortDirection = order;
+                } 
                 ArrayList<Book> books = sortByID(unsortedBooks, order);
                 return books;
             }
@@ -322,14 +326,14 @@ public class Bookshop {
         return input.equalsIgnoreCase("a");
     }
 
-    private static Map<String, Boolean> genreFilters = new HashMap<>();
+    protected static Map<String, Boolean> genreFilters = new HashMap<>();
 
     static {
         genreFilters.put("Fantasy", true);
         genreFilters.put("Romance", true);
         genreFilters.put("Dystopian", true);
-        genreFilters.put("Contemporary Fiction", true);
-        genreFilters.put("Historical Fiction", true);
+        genreFilters.put("Modern Fiction", true);
+        genreFilters.put("Historical", true);
         genreFilters.put("Non-Fiction", true);
     }
 
@@ -340,16 +344,26 @@ public class Bookshop {
 
             String input;
             while (true) {
-                System.out.println("Add [a] / remove [r] / exit [x]");
+                System.out.println("Add [a] / add all [l] / remove [r] / exit [x]");
 
                 String enter = scan.nextLine();
                 if (enter.equalsIgnoreCase("x")) {
                     break;
-                } else if (enter.equalsIgnoreCase("a") || enter.equalsIgnoreCase("r")) {
+                } else if (enter.equalsIgnoreCase("l")) {
+                    genreFilters.put("Fantasy", true);
+                    genreFilters.put("Romance", true);
+                    genreFilters.put("Dystopian", true);
+                    genreFilters.put("Modern Fiction", true);
+                    genreFilters.put("Historical", true);
+                    genreFilters.put("Non-Fiction", true);
+
+                    return givenBooks;
+                }
+                else if (enter.equalsIgnoreCase("a") || enter.equalsIgnoreCase("r")) {
                     input = enter;
 
                 while (true) {
-                    System.out.println("Fantasy [f] / romance [r] / dystopian [d] / Contemporary Fiction [c] / Historical [h] / Non-Fiction [n] / exit [x]");
+                    System.out.println("Fantasy [f] / romance [r] / dystopian [d] / Modern Fiction [m] / Historical [h] / Non-Fiction [n] / exit [x]");
                     String userGenre = scan.nextLine();
 
                     if (userGenre.equalsIgnoreCase("x")) {
@@ -363,11 +377,11 @@ public class Bookshop {
                     } else if (userGenre.equalsIgnoreCase("d")) {
                         genreFilters.put("Dystopian", filterGenre(input));
                         break;
-                    } else if (userGenre.equalsIgnoreCase("c")) {
-                        genreFilters.put("Contemporary Fiction", filterGenre(input));
+                    } else if (userGenre.equalsIgnoreCase("m")) {
+                        genreFilters.put("Modern Fiction", filterGenre(input));
                         break;
                     } else if (userGenre.equalsIgnoreCase("h")) {
-                        genreFilters.put("Historical Fiction", filterGenre(input));
+                        genreFilters.put("Historical", filterGenre(input));
                         break;
                     } else if (userGenre.equalsIgnoreCase("n")) {
                         genreFilters.put("Non-Fiction", filterGenre(input));
@@ -376,6 +390,7 @@ public class Bookshop {
                         System.out.println("Input has to be one of the given choices.");
                         }
                     }
+                    clearScreen();
 
                     ArrayList<Book> allBooks = BookManager.allBooks();
                     ArrayList<Book> filteredBooks = new ArrayList<>();
@@ -406,27 +421,25 @@ public class Bookshop {
                 filteredBooks.add(book);
             }
         }
-    
         return filteredBooks;
     }
 
     public static boolean entry() throws Exception {
         Scanner scan = new Scanner(System.in);
-       
+        clearScreen();
         while (true) {
+            
             System.out.println("login / register / exit");
             String choice = scan.nextLine();
-
             if (choice.equalsIgnoreCase("exit")) {
+                clearScreen();
                 return false;
             }
-
             if (choice.equalsIgnoreCase("login")) {
                return login();
                 
             } else if (choice.equalsIgnoreCase("register")) {
                 return register();
-                
             } else {
                 System.out.println("Must input one of the choices.");
             }      
@@ -440,7 +453,6 @@ public class Bookshop {
         boolean QUIT = false;
 
         while (REGISTRY) {
-
         String username;
             while (true) { // username check - cant be blank or shorter than 4 characters
                 System.out.println("Enter username: ");
@@ -457,8 +469,6 @@ public class Bookshop {
             String email;
             String emailPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@" 
             + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-            
-
             while (true) { // checks if input matches email pattern
                 System.out.println("Enter email: ");
                 String emailRtr = scan.nextLine();
@@ -472,8 +482,6 @@ public class Bookshop {
             }
 
             boolean userExists = false;
-
-            
             for (User userInfo : users) { // if user exists stops the method and returns true
                 if (userInfo.getName().matches(username) && userInfo.getEmail().matches(email)) {
                     userInfo.setCurrentUser(username);
@@ -504,6 +512,7 @@ public class Bookshop {
                 }
             }
         }
+        clearScreen();
         return QUIT;
     }
 
@@ -597,7 +606,13 @@ public class Bookshop {
                 }
             }
         }
+        clearScreen();
         return QUIT;
+    }
+
+    public static void clearScreen() {  
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();  
     }
 
 }

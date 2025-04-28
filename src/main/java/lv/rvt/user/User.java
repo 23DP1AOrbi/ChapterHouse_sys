@@ -1,4 +1,4 @@
-package lv.rvt.roles;
+package lv.rvt.user;
 
 public class User {
     private String name;
@@ -32,7 +32,5 @@ public class User {
     public void setCurrentUser(String username) {
         currentUser = username;
     }
-
-    public void buyBook(){}
 
 }

@@ -1,10 +1,10 @@
-package lv.rvt;
+package lv.rvt.bookManaging;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
 
-import lv.rvt.roles.User;
 import lv.rvt.tools.Helper;
+import lv.rvt.user.User;
 
 public class BookManager {
 

@@ -8,8 +8,11 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-import lv.rvt.roles.User;
+import lv.rvt.bookManaging.Book;
+import lv.rvt.bookManaging.BookManager;
+import lv.rvt.bookManaging.UserBook;
 import lv.rvt.tools.Helper;
+import lv.rvt.user.User;
 
 public class BookshopUserList extends Bookshop {
     private static String lastSortMode = "5";
@@ -32,7 +35,6 @@ public class BookshopUserList extends Bookshop {
                     input = enter;
                     if (!(search.equals("search"))) {
                         lastSortMode = enter;
-                        break;
                     }
                     break;
                 } if (enter.equals("3")) {
@@ -131,7 +133,6 @@ public class BookshopUserList extends Bookshop {
             return sortedBooks;
         }
     }
-
 
     public static ArrayList<UserBook> sortByIDForUser(ArrayList<UserBook> givenBooks, String order) throws Throwable { 
         ArrayList<UserBook> sortedList = new ArrayList<>();
@@ -290,8 +291,8 @@ public class BookshopUserList extends Bookshop {
         genreFilters.put("Fantasy", true);
         genreFilters.put("Romance", true);
         genreFilters.put("Dystopian", true);
-        genreFilters.put("Contemporary Fiction", true);
-        genreFilters.put("Historical Fiction", true);
+        genreFilters.put("Modern Fiction", true);
+        genreFilters.put("Historical", true);
         genreFilters.put("Non-Fiction", true);
     }
 
@@ -384,9 +385,11 @@ public class BookshopUserList extends Bookshop {
                     genreFilters.put("Fantasy", true);
                     genreFilters.put("Romance", true);
                     genreFilters.put("Dystopian", true);
-                    genreFilters.put("Contemporary Fiction", true);
-                    genreFilters.put("Historical Fiction", true);
+                    genreFilters.put("Modern Fiction", true);
+                    genreFilters.put("Historical", true);
                     genreFilters.put("Non-Fiction", true);
+
+                    // return givenBooks;
 
                     ArrayList<UserBook> allBooks = BookManager.allUserBooks();
                     ArrayList<UserBook> filteredBooks = new ArrayList<>();
@@ -408,7 +411,7 @@ public class BookshopUserList extends Bookshop {
                     input = enter;
 
                 while (true) {
-                    System.out.println("Fantasy [f] / romance [r] / dystopian [d] / Contemporary Fiction [c] / Historical [h] / Non-Fiction [n] / exit [x]");
+                    System.out.println("Fantasy [f] / romance [r] / dystopian [d] / Modern Fiction [m] / Historical [h] / Non-Fiction [n] / exit [x]");
                     String userGenre = scan.nextLine();
 
                     if (userGenre.equalsIgnoreCase("x")) {
@@ -423,11 +426,11 @@ public class BookshopUserList extends Bookshop {
                     } else if (userGenre.equalsIgnoreCase("d")) {
                         genreFilters.put("Dystopian", filterGenre(input));
                         break;
-                    } else if (userGenre.equalsIgnoreCase("c")) {
-                        genreFilters.put("Contemporary Fiction", filterGenre(input));
+                    } else if (userGenre.equalsIgnoreCase("m")) {
+                        genreFilters.put("Modern Fiction", filterGenre(input));
                         break;
                     } else if (userGenre.equalsIgnoreCase("h")) {
-                        genreFilters.put("Historical Fiction", filterGenre(input));
+                        genreFilters.put("Historical", filterGenre(input));
                         break;
                     } else if (userGenre.equalsIgnoreCase("n")) {
                         genreFilters.put("Non-Fiction", filterGenre(input));
@@ -439,6 +442,7 @@ public class BookshopUserList extends Bookshop {
 
                     ArrayList<UserBook> allBooks = BookManager.allUserBooks();
                     ArrayList<UserBook> filteredBooks = new ArrayList<>();
+
                     for (UserBook book : allBooks) {
                         String status;
                         if (book.getReadingStatus() == true) {
@@ -452,7 +456,7 @@ public class BookshopUserList extends Bookshop {
                                 filteredBooks.add(book); 
                         }
                     }
-                    filteredBooks = BookshopUserList.applyLastGenreFilterForUser(filteredBooks);
+                    // filteredBooks = BookshopUserList.applyLastGenreFilterForUser(filteredBooks);
                         for (UserBook filteredBook : filteredBooks) {
                             System.out.println(filteredBook.toString());
                         }
@@ -478,6 +482,11 @@ public class BookshopUserList extends Bookshop {
             }
         }
         return filteredBooks;
+    }
+
+    public static void clearScreen() {  
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();  
     }
   
 }

@@ -1,4 +1,4 @@
-package lv.rvt;
+package lv.rvt.bookManaging;
 
 public class UserBook extends Book {
     private boolean readingStatus;
