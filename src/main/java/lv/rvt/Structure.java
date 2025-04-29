@@ -113,7 +113,7 @@ public class Structure extends Bookshop { // structure for the program
             } else if (input.equalsIgnoreCase("s")) {
                 sortAllBooks(books, "");
             } else if (input.equalsIgnoreCase("e")) {
-                search(books);
+                message = search(books);
             } else if (input.equalsIgnoreCase("f")) {
                 filterAllBooks(books);
             } else if (input.equalsIgnoreCase("a")) {
@@ -266,12 +266,12 @@ public class Structure extends Bookshop { // structure for the program
                     }
                     
                 } if (NOMATCH) {
-                    System.out.println("ID out of range.");
+                    System.out.println(ConsoleColors.RED_BRIGHT + "ID out of range." + ConsoleColors.RESET);
                 } else {
                     break;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Input must be a number.");
+                System.out.println(ConsoleColors.RED_BRIGHT + "Input must be a number." + ConsoleColors.RESET);
             }
         }
     
@@ -300,7 +300,6 @@ public class Structure extends Bookshop { // structure for the program
 
             oldReadingList.delete();
             newReadingList.renameTo(oldReadingList);
-            System.out.println("Book removed successfully.");
 
             // from the given list removes the removed book 
             if (start.equalsIgnoreCase("search")) {
@@ -345,12 +344,12 @@ public class Structure extends Bookshop { // structure for the program
                     }
                     
                 } if (NOMATCH) {
-                    System.out.println("ID out of range.");
+                    System.out.println(ConsoleColors.RED_BRIGHT + "ID out of range." + ConsoleColors.RESET);
                 } else {
                     break;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Input must be a number.");
+                System.out.println(ConsoleColors.RED_BRIGHT + "Input must be a number." + ConsoleColors.RESET);
             }
         } 
         try {
@@ -376,7 +375,6 @@ public class Structure extends Bookshop { // structure for the program
 
             oldReadingList.delete();
             newReadingList.renameTo(oldReadingList);
-            System.out.println("Book status changed.");
 
             for (UserBook book : givenBooks) {
                 if (book.getId() == modifyStatusID) {

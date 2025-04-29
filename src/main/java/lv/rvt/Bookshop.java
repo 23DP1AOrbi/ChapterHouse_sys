@@ -52,7 +52,7 @@ public class Bookshop {
         writer.close();
     }
 
-    public static void search(ArrayList<Book> givenBooks) throws Throwable { // serach for name or author
+    public static String search(ArrayList<Book> givenBooks) throws Throwable { // serach for name or author
         Scanner scan = new Scanner(System.in);
         
 
@@ -95,7 +95,8 @@ public class Bookshop {
         String message = "";
 
         if (searchBook.size() == 0) {
-            System.out.println("No matching result.");
+            return ConsoleColors.BLUE_BRIGHT + "No matching results." + ConsoleColors.RESET;
+            // System.out.println("No matching result.");
         } else {
             while (true) {
                 clearScreen();
@@ -118,8 +119,8 @@ public class Bookshop {
                 } else {
                     message = ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.WHITE;
                 }
-                
             }
+            return "";
         } 
         
     }
