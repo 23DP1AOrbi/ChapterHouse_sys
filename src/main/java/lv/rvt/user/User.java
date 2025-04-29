@@ -4,13 +4,11 @@ public class User {
     private String name;
     private String email;
     private static String currentUser;
-    private boolean admin;
 
-    public User(String name, String email, boolean admin) {
+    public User(String name, String email) {
         this.name = name;
         User.currentUser = name;
         this.email = email;
-        this.admin = admin;
     }
 
     public String getName() {
@@ -22,7 +20,7 @@ public class User {
     }
 
     public String toCSV() {
-        return this.name + "," + this.email + ",false";
+        return this.name + "," + this.email;
     }
 
     public static String getCurrentUser() {

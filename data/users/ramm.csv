@@ -1,17 +1,10 @@
 Id,Name,Author,Year,Genre,Price (EUR),Finished reading
-1,A Man Called Ove,Fredrik Backman,2012,Modern Fiction,12.25,false
-2,Pride and Prejudice,Jane Austen,1813,Romance,8.99,true
-3,Outliers,Malcolm Gladwell,2008,Non-Fiction,12.69,true
-4,Scythe,Neal Shusterman,2016,Dystopian,11.65,false
-5,All the Light We Cannot See,Anthony Doerr,2014,Historical,12.95,false
-6,Sapiens,Yuval Noah Harari,2011,Non-Fiction,15.25,true
-7,The Lord of the Rings,J.R.R. Tolkien,1954,Fantasy,22.55,true
-8,To Kill a Mockingbird,Harper Lee,1960,Historical,11.15,false
-9,The Fault in Our Stars,John Green,2012,Romance,9.75,true
-10,Jane Eyre,Charlotte Brontë,1847,Romance,9.55,false
-11,1984,George Orwell,1949,Dystopian,9.49,true
-12,Eleanor Oliphant Is Completely Fine,Gail Honeyman,2017,Modern Fiction,11.75,false
-13,The Cold War,John Lewis Gaddis,2005,Non-Fiction,10.95,false
-14,An Ember in the Ashes,Sabaa Tahir,2015,Fantasy,10.85,false
-15,Educated,Tara Westover,2018,Non-Fiction,14.55,true
-16,The Hunger Games,Suzanne Collins,2008,Dystopian,10.75,false
+1,Wonder,R.J. Palacio,2012,Modern Fiction,8.95,false
+2,To Kill a Mockingbird,Harper Lee,1960,Historical,11.15,false
+3,Harry Potter and the Sorcerer's Stone,J.K. Rowling,1997,Fantasy,10.99,true
+4,Fahrenheit 451,Ray Bradbury,1953,Dystopian,10.19,true
+5,The Help,Kathryn Stockett,2009,Historical,10.85,false
+6,1984,George Orwell,1949,Dystopian,9.49,false
+7,Becoming,Michelle Obama,2018,Non-Fiction,13.75,false
+8,The Cold War,John Lewis Gaddis,2005,Non-Fiction,10.95,false
+9,Little Fires Everywhere,Celeste Ng,2017,Modern Fiction,11.39,true

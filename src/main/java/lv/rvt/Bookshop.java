@@ -9,6 +9,7 @@ import java.nio.file.StandardOpenOption;
 import lv.rvt.bookManaging.Book;
 import lv.rvt.bookManaging.BookManager;
 import lv.rvt.bookManaging.UserBook;
+import lv.rvt.colors.ConsoleColors;
 import lv.rvt.tools.Helper;
 import lv.rvt.user.User;
 
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 public class Bookshop {
     private static String lastSortMode = "5";
     private static String lastSortDirection = "a";
+    private static String temporarySortMode = "5";
+    private static String temporarySortDirection = "a";
     
 
     public static ArrayList<User> allUsers() throws Exception {
@@ -29,7 +32,7 @@ public class Bookshop {
         reader.readLine();
         while ((line = reader.readLine()) != null) {
             String[] parts = line.split(",");
-            User anotherUser = new User(parts[0], parts[1], Boolean.valueOf(parts[2]));
+            User anotherUser = new User(parts[0], parts[1]);
             users.add(anotherUser);
         }
         return users;
@@ -51,21 +54,28 @@ public class Bookshop {
 
     public static void search(ArrayList<Book> givenBooks) throws Throwable { // serach for name or author
         Scanner scan = new Scanner(System.in);
-        System.out.println("Search by book name [1], author [2] or both [3]: ");
+        
 
         String input;
         while (true) { // Checks if input is 1 or 2 or 3
+            System.out.println("Search by book name [1], author [2] or both [3]: ");
             String enter =  scan.nextLine();
             if (enter.equals("1") || enter.equals("2") || enter.equals("3")) {
                 input = enter;
                 break;
             }
             else { 
-                System.out.println("Input has to be book [1], author [2] or both [3].");
+                System.out.println(ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.WHITE);
              }
         }
+
         System.out.print("Your search: "); // user search input
         String search =  scan.nextLine();
+
+        while (search.equals("")) {
+            System.out.println(ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.WHITE);
+            search = scan.nextLine();
+        }
 
         ArrayList<Book> searchBook = new ArrayList<>();
         for (Book book : givenBooks) { 
@@ -82,31 +92,31 @@ public class Bookshop {
                 }
             }
         }
+        String message = "";
 
         if (searchBook.size() == 0) {
             System.out.println("No matching result.");
         } else {
-            for (Book book2 : searchBook) {
-                System.out.println(book2);
-            }
-            System.out.println();
-            System.out.println("Matching results: " + searchBook.size());
-            System.out.println();
-
             while (true) {
-                System.out.println("add [a] / exit [x] / sort [s]");
+                clearScreen();
+                titlePage();
+                searchBook = applyLastSort(searchBook);
+                tableFormatAll(searchBook, "search");
+
+                if (!message.equals("")) {
+                    System.out.println(message);
+                }
+                System.out.println("add [a] / sort [s] / exit [x]");
                 String choice = scan.nextLine();
                 if (choice.equalsIgnoreCase("x")) {
                     break;
                 } else if (choice.equalsIgnoreCase("a")) {
-                    Structure.addBook(searchBook);
+                    message =  Structure.addBook(searchBook, "search");
+                    System.out.println(searchBook);
                 } else if (choice.equalsIgnoreCase("s")) {
-                    ArrayList<Book> sortedSearch = Bookshop.sortAllBooks(searchBook, "search");
-                    for (Book book : sortedSearch) {
-                        System.out.println(book.toString());
-                    }
+                    searchBook = Bookshop.sortAllBooks(searchBook, "search");
                 } else {
-                    System.out.println("Invalid input.");
+                    message = ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.WHITE;
                 }
                 
             }
@@ -131,34 +141,41 @@ public class Bookshop {
                 if (!(search.equals("search"))) {
                     lastSortMode = enter;
                 }
+                temporarySortMode = enter;
                 break;
             } if (enter.equals("3")) {
-                String order = sortDirection();
+                String order = sortDirection("");
                 if (!(search.equals("search"))) {
                     lastSortMode = enter;
                     lastSortDirection = order;
                 } 
+                temporarySortMode = enter;
+                temporarySortDirection = order;
                 ArrayList<Book> books = sortByPrice(unsortedBooks, order);
                 return books;
             } if (enter.equals("4")) {
-                String order = sortDirection();
+                String order = sortDirection("");
                 if (!(search.equals("search"))) {
                     lastSortMode = enter;
                     lastSortDirection = order;
                 } 
+                temporarySortMode = enter;
+                temporarySortDirection = order;
                 ArrayList<Book> books = sortByYear(unsortedBooks, order);
                 return books;
             } if (enter.equals("5")) {
-                String order = sortDirection();
+                String order = sortDirection("");
                 if (!(search.equals("search"))) {
                     lastSortMode = enter;
                     lastSortDirection = order;
                 } 
+                temporarySortMode = enter;
+                temporarySortDirection = order;
                 ArrayList<Book> books = sortByID(unsortedBooks, order);
                 return books;
             }
             else { 
-                System.out.println("Invalid input.");
+                System.out.println(ConsoleColors.RED_BRIGHT + "Invalid input." + ConsoleColors.RESET);
                 System.out.println("name [1] / author [2] /price [3] / year [4] / id [5]");
              }
         }
@@ -181,8 +198,10 @@ public class Bookshop {
                 }
             }
         }
-        String order = sortDirection();
-        lastSortDirection = order;
+        String order = sortDirection("text");
+        if (!(search.equals("search"))) {
+            lastSortDirection = order;
+        }
         // returns the same list reversed
         if (order.equalsIgnoreCase("d")) { 
             Collections.reverse(bookList);
@@ -200,12 +219,13 @@ public class Bookshop {
         } else {
 
             ArrayList<String> sortedList = new ArrayList<>();
-            BufferedReader reader = Helper.getReader("books.csv");
-            reader.readLine();
-            
-            for (String line; (line = reader.readLine()) != null;) {
-                String[] parts = line.split(",");
-                sortedList.add(parts[Integer.parseInt(lastSortMode)]);
+
+            for (Book book : givenBooks) {
+                if (lastSortMode.equals("1")) {
+                    sortedList.add(book.getName());
+                } else if (lastSortMode.equals("2")) {
+                    sortedList.add(book.getAuthor());
+                }
             }
             Collections.sort(sortedList);
             ArrayList<Book> sortedBooks = new ArrayList<>();
@@ -283,41 +303,46 @@ public class Bookshop {
 
     public static ArrayList<Book> sortByID(ArrayList<Book> givenBooks, String order) throws Throwable { 
         ArrayList<Book> sortedList = new ArrayList<>();
-
         ArrayList<Book> allBooks = BookManager.allBooks();
 
-        int highestID = 0;
-        for (Book book : givenBooks) {
-            if (book.getId() > highestID) {
-                highestID = book.getId();
-            }
+        ArrayList<Integer> IDs = new ArrayList<>();
+        for (Book book : allBooks) {
+            IDs.add(book.getId());
         }
 
-        for (int i = 1; i <= highestID; i++) {
-            for (Book userBook : allBooks) {
-                if (userBook.getId() == i) {
-                    sortedList.add(userBook);
+        for (Integer id : IDs) {
+            for (Book book : givenBooks) {
+                if (book.getId() == id) {
+                    sortedList.add(book);
                 }
             }
-        } 
+        }
         if (order.equalsIgnoreCase("d")) {
             Collections.reverse(sortedList);
         }
         return sortedList;
     }
 
-    public static String sortDirection() { // Checks how to display the sorted list 
+    public static String sortDirection(String sortingVersion) { // Checks how to display the sorted list 
         Scanner scan = new Scanner(System.in);
-        System.out.println("In ascending [A-Z] or descending [Z-A] order.");
-        System.out.println("A - ascending ↑");
-        System.out.println("D - descending ↓");
+        System.out.println("Order by");
+        
+        
+        if (sortingVersion.equals("text")) {
+            System.out.println("A -> [A-Z]");
+            System.out.println("D -> [Z-A]");
+        } else {
+            System.out.println("A - ↑");
+            System.out.println("D - ↓");
+        }
 
+        System.out.println("Ascending  [a] / descending [d]");
         while (true) { // Checks if input is a/A or d/D
             String enter =  scan.nextLine();
             if (enter.equalsIgnoreCase("a") || enter.equalsIgnoreCase("d")) {
                 return enter;
             } else { 
-                System.out.println("Input has to be ascending [A] or descending [D].");
+                System.out.println(ConsoleColors.RED_BRIGHT + "Input has to be ascending [A] or descending [D]." + ConsoleColors.RESET);
             }
         }
     }
@@ -337,7 +362,7 @@ public class Bookshop {
         genreFilters.put("Non-Fiction", true);
     }
 
-    public static ArrayList<Book> filterAllBooks(ArrayList<Book> givenBooks) throws Exception { // choose restrictions for displayed books
+    public static ArrayList<Book> filterAllBooks(ArrayList<Book> givenBooks) throws Throwable { // choose restrictions for displayed books
         
         Scanner scan = new Scanner(System.in);
         ArrayList<Book> filteredBookList = new ArrayList<>();
@@ -387,26 +412,31 @@ public class Bookshop {
                         genreFilters.put("Non-Fiction", filterGenre(input));
                         break;
                     } else {
-                        System.out.println("Input has to be one of the given choices.");
+                        System.out.println(ConsoleColors.RED_BRIGHT + "Invalid input." + ConsoleColors.RESET);
                         }
                     }
-                    clearScreen();
+
 
                     ArrayList<Book> allBooks = BookManager.allBooks();
                     ArrayList<Book> filteredBooks = new ArrayList<>();
                     for (Book book : allBooks) {
+                        // adds books which genres return true
                         boolean genreEnabled = genreFilters.getOrDefault(book.getGenre(), false);
                         if (genreEnabled) {
                                 filteredBooks.add(book);
+                                System.out.println("Book genre:" + book.getGenre());
                             }
-                        } filteredBooks = Bookshop.applyLastGenreFilter(filteredBooks);
-                        for (Book filteredBook : filteredBooks) {
-                            System.out.println(filteredBook.toString());
-                        }
+                    } 
+                    filteredBooks = Bookshop.applyLastSort(filteredBooks);
+
+                    clearScreen();
+                    titlePage();
+                    tableFormatAll(filteredBooks, "");
+
 
                 filteredBookList = filteredBooks;
             } else {
-                System.out.println("Invalid input.");
+                System.out.println(ConsoleColors.RED_BRIGHT + "Invalid input." + ConsoleColors.RESET);
             }
         }
         return filteredBookList;
@@ -426,10 +456,12 @@ public class Bookshop {
 
     public static boolean entry() throws Exception {
         Scanner scan = new Scanner(System.in);
-        clearScreen();
+        
         while (true) {
+            clearScreen();
+            titlePage();
             
-            System.out.println("login / register / exit");
+            System.out.println("                               login / register / exit");
             String choice = scan.nextLine();
             if (choice.equalsIgnoreCase("exit")) {
                 clearScreen();
@@ -441,7 +473,7 @@ public class Bookshop {
             } else if (choice.equalsIgnoreCase("register")) {
                 return register();
             } else {
-                System.out.println("Must input one of the choices.");
+                System.out.println(ConsoleColors.RED_BRIGHT + "Must input one of the choices." + ConsoleColors.WHITE);
             }      
         } 
     }
@@ -453,7 +485,8 @@ public class Bookshop {
         boolean QUIT = false;
 
         while (REGISTRY) {
-        String username;
+            
+            String username;
             while (true) { // username check - cant be blank or shorter than 4 characters
                 System.out.println("Enter username: ");
                 String name = scan.nextLine();
@@ -462,7 +495,7 @@ public class Bookshop {
                     username = name;
                     break;
                 } else {
-                    System.out.println("Username must be at least 4 characters.");
+                    System.out.println(ConsoleColors.BLUE_BRIGHT +"Username must be at least 4 characters." + ConsoleColors.WHITE);
                 }
             }
 
@@ -477,7 +510,7 @@ public class Bookshop {
                     email = emailRtr;
                     break;
                 }
-                System.out.println("Email must be the right pattern.");
+                System.out.println(ConsoleColors.RED_BRIGHT + "Email must be the right pattern." + ConsoleColors.WHITE);
                 System.out.println();            
             }
 
@@ -490,16 +523,18 @@ public class Bookshop {
                     
                     return true;
                 } else if (userInfo.getEmail().matches(email)) {
-                    System.out.println("Wrong username.");
+                    System.out.println(ConsoleColors.RED_BRIGHT + "Wrong username." + ConsoleColors.WHITE);
                 }
             }
 
             while (!userExists) {
-                System.out.println("User doesn't exist");
+                System.out.println(ConsoleColors.RED_BRIGHT + "User doesn't exist" + ConsoleColors.WHITE);
                 System.out.println("try again [a] / exit [e]");
                 String choice = scan.nextLine();
 
                 if (choice.equalsIgnoreCase("a")) {
+                    clearScreen();
+                    titlePage();
                     break;
                 } else if (choice.equalsIgnoreCase("e")) { // if user exits, the while cycle for registering ends
                     REGISTRY = false;                                    // and goes back to the intro for registering choice
@@ -507,12 +542,11 @@ public class Bookshop {
                     QUIT = FAIL;
                     break;
                 } else {
-                    System.out.println("Input must be a or e");
+                    System.out.println(ConsoleColors.RED_BRIGHT + "Input must be a or e." + ConsoleColors.WHITE);
                     System.out.println();
                 }
             }
         }
-        clearScreen();
         return QUIT;
     }
 
@@ -533,7 +567,7 @@ public class Bookshop {
                     username = name;
                     break;
                 } else {
-                    System.out.println("Username has to be at least 4 characters.");
+                    System.out.println(ConsoleColors.BLUE_BRIGHT + "Username has to be at least 4 characters." + ConsoleColors.WHITE);
                 }
             }
 
@@ -549,24 +583,24 @@ public class Bookshop {
                     email = emailRtr;
                     break;
                 }
-                System.out.println("Email must be the right pattern.");
+                System.out.println(ConsoleColors.RED_BRIGHT +"Email must be the right pattern." + ConsoleColors.WHITE);
                 System.out.println();            
             }
 
-            User user = new User(username, email, false);
+            User user = new User(username, email);
             boolean userExists = false;
             
             for (User userInfo : users) { // checks if user with the same name & email is already being used
                 if (userInfo.getName().equals(user.getName()) && userInfo.getEmail().equals(user.getEmail())) {
-                    System.out.println("User already exists.");
+                    System.out.println(ConsoleColors.RED_BRIGHT + "User already exists." + ConsoleColors.WHITE);
                     userExists = true;
                     break;
                 } else if (userInfo.getEmail().equals(user.getEmail())) { // checks if the email is being used
-                    System.out.println("Email already in use.");
+                    System.out.println(ConsoleColors.RED_BRIGHT + "Email already in use." + ConsoleColors.WHITE);
                     userExists = true;
                     break;
                 } else if (userInfo.getName().equals(user.getName())) {
-                    System.out.println("Username is taken.");
+                    System.out.println(ConsoleColors.RED_BRIGHT + "Username is taken." + ConsoleColors.WHITE);
                     userExists = true;
                     break;
                 }
@@ -594,6 +628,8 @@ public class Bookshop {
                 String choice = scan.nextLine();
 
                 if (choice.equalsIgnoreCase("a")) {
+                    clearScreen();
+                    titlePage();
                     break;
                 } else if (choice.equalsIgnoreCase("e")) { // if user exits, the while cycle for registering ends
                     REGISTRY = false;                                    // and goes back to the intro for registering choice
@@ -601,18 +637,189 @@ public class Bookshop {
                     QUIT = FAIL;
                     break;
                 } else {
-                    System.out.println("Input must be a or e");
+                    System.out.println(ConsoleColors.RED_BRIGHT + "Input must be a or e" + ConsoleColors.WHITE);
                     System.out.println();
                 }
             }
         }
-        clearScreen();
         return QUIT;
     }
 
     public static void clearScreen() {  
         System.out.print("\033[H\033[2J");  
         System.out.flush();  
+    }
+
+    public static void tableFormatAll(ArrayList<Book> givenBooks, String start) throws Exception  {
+
+        String idColor = "";
+        String nameColor = "";
+        String authorColor = "";
+        String yearColor = "";
+        String priceColor = "";
+
+        if (start.equals("search")) {
+            if (temporarySortMode.equals("5")) {
+                idColor = ConsoleColors.PURPLE;
+            } else if (temporarySortMode.equals("1")) {
+                nameColor = ConsoleColors.PURPLE;
+            } else if (temporarySortMode.equals("2")) {
+                authorColor = ConsoleColors.PURPLE;
+            } else if (temporarySortMode.equals("3")) {
+                priceColor = ConsoleColors.PURPLE;
+            } else if (temporarySortMode.equals("4")) {
+                yearColor = ConsoleColors.PURPLE;
+            }
+        } else {
+            if (lastSortMode.equals("5")) {
+                idColor = ConsoleColors.PURPLE;
+            } else if (lastSortMode.equals("1")) {
+                nameColor = ConsoleColors.PURPLE;
+            } else if (lastSortMode.equals("2")) {
+                authorColor = ConsoleColors.PURPLE;
+            } else if (lastSortMode.equals("3")) {
+                priceColor = ConsoleColors.PURPLE;
+            } else if (lastSortMode.equals("4")) {
+                yearColor = ConsoleColors.PURPLE;
+            }
+        }
+
+        System.out.println("==================================================================================================");
+        System.out.print("| " + idColor + "ID" + ConsoleColors.RESET + " |");
+        System.out.print(" " + nameColor + "Book Name" + ConsoleColors.RESET + "                             ");
+        System.out.print("| " + authorColor + "Author" + ConsoleColors.RESET + "            ");
+        System.out.print("| " + yearColor + "Year" + ConsoleColors.RESET + " ");
+        System.out.print("| Genre          ");
+        System.out.print("| " + priceColor + "Price" + ConsoleColors.RESET + " |\n");
+        System.out.println("==================================================================================================");
+        System.out.println("--------------------------------------------------------------------------------------------------");
+
+        for (Book book : givenBooks) {
+            System.out.printf("| %-3d| ", book.getId());
+            System.out.printf("%-38s| ", book.getName());
+            System.out.printf("%-18s| ", book.getAuthor());
+            System.out.printf("%-5d| ", book.getYear());
+            System.out.printf("%-15s| ", book.getGenre());
+            System.out.printf("%-6.2f| \n", book.getPrice());
+            System.out.println("--------------------------------------------------------------------------------------------------");
+        } 
+        System.out.println("==================================================================================================");
+
+        ArrayList<Book> bookTotal = BookManager.allBooks();
+        System.out.printf("| %50s", "Visible Books: ");
+        System.out.printf("%3s/", givenBooks.size());
+        System.out.printf("%-41s|\n", bookTotal.size());
+        System.out.println("==================================================================================================");
+        visibleFilters(start);
+    }
+
+    public static void titlePage() {
+
+        System.out.println(ConsoleColors.YELLOW +"             _____  _                    _");
+        System.out.println("            /  __ \\| |                  | |");
+        System.out.println("            | /  \\/| |__    __ _  _ __  | |_   ___  _ __");
+        System.out.println("            | |    | '_ \\  / _` || '_ \\ | __| / _ \\| '__|");
+        System.out.println(ConsoleColors.PURPLE + "            | \\__/\\| | | || (_| || |_) || |_ |  __/| |");
+        System.out.println("             \\____/|_| |_| \\__,_|| .__/  \\__| \\___||_| ");
+        System.out.println("                                 |_|" + ConsoleColors.YELLOW +" _   _ ");
+        System.out.println("                                    | |_| |  ___   _   _  ___   ___ ");
+        System.out.println("                                    |  _  | / _ \\ | | | |/ __| / _ \\" + ConsoleColors.PURPLE);
+        System.out.println("                                    | | | || (_) || |_| |\\__ \\|  __/");
+        System.out.println("                                    \\_| |_/ \\___/  \\__,_||___/ \\___|");
+        System.out.println(ConsoleColors.WHITE + "");
+        System.out.println("");
+
+
+        System.out.println("                          .-~~~~~~~~~-._       _.-~~~~~~~~~-.");
+        System.out.println("                      __.'              ~.   .~              `.__");
+        System.out.println("                    .'//                  \\./                  \\\\`.");
+        System.out.println("                  .'//                     |                     \\\\`.");
+        System.out.println("                .'// .-~\"\"\"\"\"\"\"~~~~-._     |     _,-~~~~\"\"\"\"\"\"\"~-. \\\\`.");
+        System.out.println("              .'//.-\"                 `-.  |  .-'                 \"-.\\\\`.");
+        System.out.println("           .'//______.============-..   \\ | /   ..-============.______\\\\`.");
+        System.out.println("         .'______________________________\\|/______________________________`.");
+        System.out.println("      =========================================================================");
+        System.out.println();
+    }
+
+    public static void visibleFilters(String start) {
+        // genre filter
+        String fantasyStatus = " ";
+        String romanceStatus = " ";
+        String dystopianStatus = " ";
+        String modernStatus = " ";
+        String historicalStatus = " ";
+        String nonfictionStatus = " ";
+
+        // sort direction 
+        String alphabet = " ";
+        String alphReverse = " ";
+        String ascending = " ";
+        String descending = " ";
+
+        if (start.equals("search")) {
+            if (temporarySortMode.equals("1") || temporarySortMode.equals("2")) {
+                if (temporarySortDirection.equals("a")) {
+                    alphabet = "X";
+                } else {
+                    alphReverse = "X";
+                }
+            } else {
+                if (temporarySortDirection.equals("a")) {
+                    ascending = "X";
+                } else {
+                    descending = "X";
+                }
+            }
+        } else {
+            if (lastSortMode.equals("1") || lastSortMode.equals("2")) {
+                if (lastSortDirection.equals("a")) {
+                    alphabet = "X";
+                } else {
+                    alphReverse = "X";
+                }
+            } else {
+                if (lastSortDirection.equals("a")) {
+                    ascending = "X";
+                } else {
+                    descending = "X";
+                }
+            }
+        }
+        
+
+        if (genreFilters.get("Fantasy")) {
+            fantasyStatus = "X";
+        } if (genreFilters.get("Romance")) {
+            romanceStatus = "X";
+        } if (genreFilters.get("Dystopian")) {
+            dystopianStatus = "X";
+        } if (genreFilters.get("Modern Fiction")) {
+            modernStatus = "X";
+        } if (genreFilters.get("Historical")) {
+            historicalStatus = "X";
+        } if (genreFilters.get("Non-Fiction")) {
+            nonfictionStatus = "X";
+        }
+
+        System.out.println("==================================================================================================");
+        System.out.printf("| %60s", "Active Genres & Sorting Direction");
+        System.out.printf("%36s\n", "|");
+        System.out.println("--------------------------------------------------------------------------------------------------");
+        System.out.printf("| %22s", "Fantasy [" + fantasyStatus + "]");
+        System.out.printf("%22s", "Romance [" + romanceStatus + "]");
+        System.out.printf("%22s", " Dystopian [" + dystopianStatus + "]");
+        System.out.printf("%15s", "A-Z [" + alphabet + "]");
+        System.out.printf("%10s", "↑ [" + ascending + "]");
+        System.out.printf("%5s\n", "|");
+        System.out.printf("| %22s", "Modern Fiction [" + modernStatus + "]");
+        System.out.printf("%22s", "Historical [" + historicalStatus + "]");
+        System.out.printf("%22s", "Non-Fiction [" + nonfictionStatus + "]");
+        System.out.printf("%15s", "Z-A [" + alphReverse + "]");
+        System.out.printf("%10s", "↓ [" + descending + "]");
+        System.out.printf("%5s\n", "|");
+        System.out.println("--------------------------------------------------------------------------------------------------");
+        System.out.println("==================================================================================================");
     }
 
 }
