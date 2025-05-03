@@ -299,7 +299,7 @@ public class Structure extends Bookshop { // structure for the program
         
             writer.flush();
             writer.close();
-            reader.close();
+            reader.close(); 
 
             oldReadingList.delete();
             newReadingList.renameTo(oldReadingList);
