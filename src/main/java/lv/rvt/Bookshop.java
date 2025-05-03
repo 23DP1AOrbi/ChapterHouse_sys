@@ -96,12 +96,10 @@ public class Bookshop {
 
         if (searchBook.size() == 0) {
             return ConsoleColors.BLUE_BRIGHT + "No matching results." + ConsoleColors.RESET;
-            // System.out.println("No matching result.");
         } else {
             while (true) {
                 clearScreen();
                 titlePage();
-                searchBook = applyLastSort(searchBook);
                 tableFormatAll(searchBook, "search");
 
                 if (!message.equals("")) {
@@ -122,14 +120,12 @@ public class Bookshop {
             }
             return "";
         } 
-        
     }
 
     public static ArrayList<Book> sortAllBooks(ArrayList<Book> unsortedBooks, String search) throws Throwable  { // change in what order everything is displayed
 
         ArrayList<String> sortedList = new ArrayList<>();
         BufferedReader reader = Helper.getReader("books.csv");
-
 
         Scanner scan = new Scanner(System.in);
         System.out.println("Sort by");
@@ -463,6 +459,8 @@ public class Bookshop {
             titlePage();
             
             System.out.println("                               login / register / exit");
+            System.out.println();
+            System.out.print("                                       ");
             String choice = scan.nextLine();
             if (choice.equalsIgnoreCase("exit")) {
                 clearScreen();
@@ -486,17 +484,20 @@ public class Bookshop {
         boolean QUIT = false;
 
         while (REGISTRY) {
+            clearScreen();
+            titlePage();
             
             String username;
             while (true) { // username check - cant be blank or shorter than 4 characters
-                System.out.println("Enter username: ");
+                System.out.println("                                   Enter username: ");
+                System.out.print("                                        ");
                 String name = scan.nextLine();
 
                 if (!(name.equals(null)) && name.length() > 3) { 
                     username = name;
                     break;
                 } else {
-                    System.out.println(ConsoleColors.BLUE_BRIGHT +"Username must be at least 4 characters." + ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.BLUE_BRIGHT +"                        Username must be at least 4 characters." + ConsoleColors.WHITE);
                 }
             }
 
@@ -504,15 +505,16 @@ public class Bookshop {
             String emailPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@" 
             + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
             while (true) { // checks if input matches email pattern
-                System.out.println("Enter email: ");
+                System.out.println();
+                System.out.println("                                   Enter email: ");
+                System.out.print("                                      ");
                 String emailRtr = scan.nextLine();
 
                 if (emailRtr.matches(emailPattern)) {
                     email = emailRtr;
                     break;
                 }
-                System.out.println(ConsoleColors.RED_BRIGHT + "Email must be the right pattern." + ConsoleColors.WHITE);
-                System.out.println();            
+                System.out.println(ConsoleColors.RED_BRIGHT + "                           Email must be the right pattern." + ConsoleColors.WHITE);           
             }
 
             boolean userExists = false;
@@ -524,18 +526,21 @@ public class Bookshop {
                     
                     return true;
                 } else if (userInfo.getEmail().matches(email)) {
-                    System.out.println(ConsoleColors.RED_BRIGHT + "Wrong username." + ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.RED_BRIGHT + "                                  Wrong username." + ConsoleColors.WHITE);
                 }
             }
 
             while (!userExists) {
-                System.out.println(ConsoleColors.RED_BRIGHT + "User doesn't exist" + ConsoleColors.WHITE);
-                System.out.println("try again [a] / exit [e]");
+                clearScreen();
+                titlePage();
+                System.out.println();
+                System.out.println(ConsoleColors.RED_BRIGHT + "                                  User doesn't exist" + ConsoleColors.WHITE);
+                System.out.println();
+                System.out.println("                                try again [a] / exit [e]");
+                System.out.print("                                   ");
                 String choice = scan.nextLine();
 
                 if (choice.equalsIgnoreCase("a")) {
-                    clearScreen();
-                    titlePage();
                     break;
                 } else if (choice.equalsIgnoreCase("e")) { // if user exits, the while cycle for registering ends
                     REGISTRY = false;                                    // and goes back to the intro for registering choice
@@ -543,7 +548,7 @@ public class Bookshop {
                     QUIT = FAIL;
                     break;
                 } else {
-                    System.out.println(ConsoleColors.RED_BRIGHT + "Input must be a or e." + ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.RED_BRIGHT + "                                Input must be a or e." + ConsoleColors.WHITE);
                     System.out.println();
                 }
             }
@@ -558,17 +563,20 @@ public class Bookshop {
         boolean QUIT = false;
 
         while (REGISTRY) {
+            clearScreen();
+            titlePage();
             
             String username;
             while (true) { // username check - cant be blank or shorter than 4 characters
-                System.out.println("Enter username: ");
+                System.out.println("                                   Enter username: ");
+                System.out.print("                                        ");
                 String name = scan.nextLine();
 
                 if (!(name.equals(null)) && name.length() > 3) {
                     username = name;
                     break;
                 } else {
-                    System.out.println(ConsoleColors.BLUE_BRIGHT + "Username has to be at least 4 characters." + ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.BLUE_BRIGHT + "                        Username has to be at least 4 characters." + ConsoleColors.WHITE);
                 }
             }
 
@@ -577,14 +585,15 @@ public class Bookshop {
             + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
 
             while (true) { // checks email pattern
-                System.out.println("Enter email: ");
+                System.out.println("                                   Enter email: ");
+                System.out.print("                                      ");
                 String emailRtr = scan.nextLine();
 
                 if (emailRtr.matches(emailPattern)) {
                     email = emailRtr;
                     break;
                 }
-                System.out.println(ConsoleColors.RED_BRIGHT +"Email must be the right pattern." + ConsoleColors.WHITE);
+                System.out.println(ConsoleColors.RED_BRIGHT +"                           Email must be the right pattern." + ConsoleColors.WHITE);
                 System.out.println();            
             }
 
@@ -593,15 +602,15 @@ public class Bookshop {
             
             for (User userInfo : users) { // checks if user with the same name & email is already being used
                 if (userInfo.getName().equals(user.getName()) && userInfo.getEmail().equals(user.getEmail())) {
-                    System.out.println(ConsoleColors.RED_BRIGHT + "User already exists." + ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.RED_BRIGHT + "                                  User already exists." + ConsoleColors.WHITE);
                     userExists = true;
                     break;
                 } else if (userInfo.getEmail().equals(user.getEmail())) { // checks if the email is being used
-                    System.out.println(ConsoleColors.RED_BRIGHT + "Email already in use." + ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.RED_BRIGHT + "                                  Email already in use." + ConsoleColors.WHITE);
                     userExists = true;
                     break;
                 } else if (userInfo.getName().equals(user.getName())) {
-                    System.out.println(ConsoleColors.RED_BRIGHT + "Username is taken." + ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.RED_BRIGHT + "                                  Username is taken." + ConsoleColors.WHITE);
                     userExists = true;
                     break;
                 }
@@ -614,7 +623,7 @@ public class Bookshop {
 
                 // make new file to store added books
                 File file = new File("/workspaces/Eksamens_praktiskais/data/users/"+ user.getName() +".csv");
-                file.createNewFile();
+                file.createNewFile(); 
 
                 BufferedWriter writer = Helper.getWriter("users/" + user.getName()+".csv", StandardOpenOption.APPEND);
 
@@ -625,12 +634,11 @@ public class Bookshop {
             }
 
             while (true) {
-                System.out.println("try again [a] / exit [e]");
+                System.out.println("                                try again [a] / exit [e]");
+                System.out.print("                                   ");
                 String choice = scan.nextLine();
 
                 if (choice.equalsIgnoreCase("a")) {
-                    clearScreen();
-                    titlePage();
                     break;
                 } else if (choice.equalsIgnoreCase("e")) { // if user exits, the while cycle for registering ends
                     REGISTRY = false;                                    // and goes back to the intro for registering choice
@@ -638,7 +646,7 @@ public class Bookshop {
                     QUIT = FAIL;
                     break;
                 } else {
-                    System.out.println(ConsoleColors.RED_BRIGHT + "Input must be a or e" + ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.RED_BRIGHT + "                                Input must be a or e" + ConsoleColors.WHITE);
                     System.out.println();
                 }
             }

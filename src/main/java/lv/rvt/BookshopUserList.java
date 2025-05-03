@@ -278,8 +278,9 @@ public class BookshopUserList extends Bookshop {
                 clearScreen();
                 titlePage();
                 tableFormatUser(searchBook, "search");
+                
                 System.out.println(message);
-                System.out.println("remove [r] /sort [s] / change status [c] / exit [x]  ");
+                System.out.println("remove [r] / sort [s] / change status [c] / exit [x]  ");
                 String choice = scan.nextLine();
                 if (choice.equalsIgnoreCase("x")) {
                     message = "";
@@ -287,6 +288,9 @@ public class BookshopUserList extends Bookshop {
                 } else if (choice.equalsIgnoreCase("r")) {
                     searchBook = Structure.removeBook("/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + ".csv", searchBook, "search");
                     givenBooks = searchBook;
+                    if (searchBook.size() == 0) {
+                        return ConsoleColors.GREEN_BRIGHT + "Book removed." + ConsoleColors.WHITE;
+                    }
                 } else if (choice.equalsIgnoreCase("s")) {
                     searchBook = BookshopUserList.sortAllUserBooks(searchBook, "search");
                 } else if (choice.equalsIgnoreCase("c")) {
@@ -294,7 +298,6 @@ public class BookshopUserList extends Bookshop {
                 } else {
                     message = ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.WHITE;
                 }
-                
             }
         return message;
     }
@@ -335,10 +338,8 @@ public class BookshopUserList extends Bookshop {
             statusFilters.put("Finished", true);
             statusFilters.put("Unfinished", true);
 
-            // ArrayList<UserBook> books = ;
             lastSortMode = "5";
             lastSortDirection = "a";
-            // books = BookshopUserList.sortByIDForUser(books, "a");
             return BookManager.allUserBooks(); 
         }
 
@@ -621,8 +622,6 @@ public class BookshopUserList extends Bookshop {
 
 
         // colors in the last active sorting method
-        
-
         if (start.equals("search")) {
             if (temporarySortMode.equals("5")) {
                 idColor = ConsoleColors.PURPLE;

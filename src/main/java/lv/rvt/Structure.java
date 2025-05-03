@@ -23,12 +23,11 @@ public class Structure extends Bookshop { // structure for the program
         boolean INTRO = true;
         while (INTRO) {
 
+            String wait = scan.nextLine();
             clearScreen();
             boolean SYSTEM = Bookshop.entry();
-            // String currentUser = User.getCurrentUser();
 
             while (SYSTEM) {
-
                 show(books);
                 break;
             } 
@@ -46,7 +45,8 @@ public class Structure extends Bookshop { // structure for the program
             while (SYSTEMCHECK) { // extra check to ask again if user really wants to exit
                 clearScreen();
                 titlePage();
-                System.out.println("Are you sure? y/n");
+                System.out.println("                                   Are you sure? y/n");
+                System.out.print("                                   ");
                 String choice = scan.nextLine();
                 if (choice.equalsIgnoreCase("y")) {
                     INTRO = false;
@@ -68,10 +68,13 @@ public class Structure extends Bookshop { // structure for the program
         while (true) {
             clearScreen();
             titlePage();
-            System.out.println(message);
-            System.out.println("Show all books [a] / show your reading list [l] / exit [x].");
+            if (!message.equals("")) {
+                System.out.println("                                  " + message);
+            }
+            System.out.println("        Show all books [a]   /   show your reading list [l]   /   exit [x].");
             
             message = "";
+            System.out.print("        ");
             String input = scan.nextLine();
             if (input.equalsIgnoreCase("x")) {
                 break;
@@ -104,7 +107,7 @@ public class Structure extends Bookshop { // structure for the program
             }
             
             message = "";
-            System.out.println("Sort [s] / search [e] / filter [f] / add [a] / exit [x]");
+            System.out.println("   Sort [s]      /     search [e]      /     filter [f]      /     add [a]      /     exit [x]");
 
             String input = scan.nextLine();
 
@@ -152,7 +155,7 @@ public class Structure extends Bookshop { // structure for the program
                 System.out.println(message);
             }
 
-            System.out.println("Sort [s] / search [e] / filter [f] / remove [r] / reset [t] / change status [c] / exit [x]");
+            System.out.println("Sort [s] /  search [e]   /  filter [f]   /  remove [r]   /  reset [t]   /  change status [c]   / exit [x]");
             message = "";
             String input = scan.nextLine();
             if (input.equals("x")) {
