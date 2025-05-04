@@ -1,4 +1,4 @@
-package lv.rvt;
+package lv.rvt.mainFunctions;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,7 +22,6 @@ public class Structure extends Bookshop { // structure for the program
 
         boolean INTRO = true;
         while (INTRO) {
-            String wait = scan.nextLine();
 
             clearScreen();
             boolean SYSTEM = Bookshop.entry();

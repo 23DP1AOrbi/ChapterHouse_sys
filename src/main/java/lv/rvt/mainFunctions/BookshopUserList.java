@@ -1,4 +1,4 @@
-package lv.rvt;
+package lv.rvt.mainFunctions;
 
 import java.io.BufferedReader;
 import java.math.BigDecimal;
@@ -236,14 +236,14 @@ public class BookshopUserList extends Bookshop {
                 break;
             }
             else { 
-                System.out.println(ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.WHITE);
+                System.out.println(ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.RESET);
              }
         }
         System.out.print("Your search: "); // user search input
         String search =  scan.nextLine();
 
         while (search.equals("")) {
-            System.out.println(ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.WHITE);
+            System.out.println(ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.RESET);
             search = scan.nextLine();
         }
 
@@ -267,7 +267,7 @@ public class BookshopUserList extends Bookshop {
 
             while (true) {
                 if (searchBook.size() == 0 || search.equals("")) {
-                    return ConsoleColors.RED_BRIGHT + "No matching result." + ConsoleColors.WHITE;
+                    return ConsoleColors.RED_BRIGHT + "No matching result." + ConsoleColors.RESET;
                 }
                 clearScreen();
                 titlePage();
@@ -286,14 +286,14 @@ public class BookshopUserList extends Bookshop {
                     searchBook = Structure.removeBook("/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + ".csv", searchBook, "search");
                     givenBooks = searchBook;
                     if (searchBook.size() == 0) {
-                        return ConsoleColors.GREEN_BRIGHT + "Book removed." + ConsoleColors.WHITE;
+                        return ConsoleColors.GREEN_BRIGHT + "Book removed." + ConsoleColors.RESET;
                     }
                 } else if (choice.equalsIgnoreCase("s")) {
                     searchBook = BookshopUserList.sortAllUserBooks(searchBook, "search");
                 } else if (choice.equalsIgnoreCase("c")) {
                     searchBook = Structure.changeBookReadingStatus("/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + ".csv", searchBook);
                 } else {
-                    message = ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.WHITE;
+                    message = ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.RESET;
                 }
             }
         return message;
@@ -619,7 +619,7 @@ public class BookshopUserList extends Bookshop {
         String priceColor = "";
 
 
-        // colors in the last active sorting method
+        // colors in the last active sorting method within search
         if (start.equals("search")) {
             if (temporarySortMode.equals("5")) {
                 idColor = ConsoleColors.PURPLE;
@@ -632,7 +632,7 @@ public class BookshopUserList extends Bookshop {
             } else if (temporarySortMode.equals("4")) {
                 yearColor = ConsoleColors.PURPLE;
             }
-        } else {
+        } else { // colors in the last active sorting method everywhere else
             if (lastSortMode.equals("5")) {
                 idColor = ConsoleColors.PURPLE;
             } else if (lastSortMode.equals("1")) {

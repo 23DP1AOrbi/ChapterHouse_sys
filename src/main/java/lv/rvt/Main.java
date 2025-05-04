@@ -1,11 +1,11 @@
 package lv.rvt;
 
+import lv.rvt.mainFunctions.Structure;
+
 public class Main {
     public static void main( String[] args ) throws Throwable {
 
-        // System.out.println("launch this shit");
-        Structure.start();
-        
+        Structure.start();        
     }
 }
 

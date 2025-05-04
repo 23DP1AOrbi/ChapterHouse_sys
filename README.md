@@ -40,7 +40,7 @@ Katra izvēle veic dažādas pārbaudes, bet izskats un pieprasījumi ir līdzī
 Tā ir pieejama gan katalogam, gan lietotāja sarakstam.
 #### 1. Ievada pēc kuras kategorijas un virziena.
 ![Sorting](guide_img/functions/sort/sorting.png)
-#### 2. Izmaiņas ir redzamas saraksta secībā, iekrāsotā virsraksta daļa un saraksta beigās pēc iezīmētā virziena.
+#### 2. Izmaiņas ir redzamas saraksta secībā, iekrāsotājā virsraksta daļā un saraksta beigās pēc iezīmētā virziena.
 ![Descriptor Change](guide_img/functions/sort/sorting_top_change.png)
 ![Direction Change](guide_img/functions/sort/sorting_direction.png)
 
@@ -87,7 +87,7 @@ Tikai lietotāja lasīšanas sarakstam.
 
 ### Filtrēšana pēc statusa
 Tikai lietotāja lasīšanas sarakstam.
-#### 1. Izvēlas vai rādīt visas, vai tikai lasītās, vai tikai nelasītās
+#### 1. Izvēlas vai rādīt visas, vai tikai lasītās, vai tikai nelasītās.
 ![Filter Status](guide_img/functions/filter_status/filter_status.png)
 #### 2. Redzamas tikai izvēlētā statusa grāmatas.
 ![Filter Status Result](guide_img/functions/filter_status/filter_status_result.png)

@@ -1,4 +1,4 @@
-package lv.rvt;
+package lv.rvt.mainFunctions;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -65,7 +65,7 @@ public class Bookshop {
                 break;
             }
             else { 
-                System.out.println(ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.WHITE);
+                System.out.println(ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.RESET);
              }
         }
 
@@ -73,7 +73,7 @@ public class Bookshop {
         String search =  scan.nextLine();
 
         while (search.equals("")) {
-            System.out.println(ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.WHITE);
+            System.out.println(ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.RESET);
             search = scan.nextLine();
         }
 
@@ -115,7 +115,7 @@ public class Bookshop {
                 } else if (choice.equalsIgnoreCase("s")) {
                     searchBook = Bookshop.sortAllBooks(searchBook, "search");
                 } else {
-                    message = ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.WHITE;
+                    message = ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.RESET;
                 }
             }
             return "";
@@ -467,7 +467,7 @@ public class Bookshop {
             } else if (choice.equalsIgnoreCase("register")) {
                 return register();
             } else {
-                System.out.println(ConsoleColors.RED_BRIGHT + "Must input one of the choices." + ConsoleColors.WHITE);
+                System.out.println(ConsoleColors.RED_BRIGHT + "Must input one of the choices." + ConsoleColors.RESET);
             }      
         } 
     }
@@ -492,7 +492,7 @@ public class Bookshop {
                     username = name;
                     break;
                 } else {
-                    System.out.println(ConsoleColors.BLUE_BRIGHT +"                        Username must be at least 4 characters." + ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.BLUE_BRIGHT +"                        Username must be at least 4 characters." + ConsoleColors.RESET);
                 }
             }
 
@@ -509,7 +509,7 @@ public class Bookshop {
                     email = emailRtr;
                     break;
                 }
-                System.out.println(ConsoleColors.RED_BRIGHT + "                           Email must be the right pattern." + ConsoleColors.WHITE);           
+                System.out.println(ConsoleColors.RED_BRIGHT + "                           Email must be the right pattern." + ConsoleColors.RESET);           
             }
 
             boolean userExists = false;
@@ -521,7 +521,7 @@ public class Bookshop {
                     
                     return true;
                 } else if (userInfo.getEmail().matches(email)) {
-                    System.out.println(ConsoleColors.RED_BRIGHT + "                                  Wrong username." + ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.RED_BRIGHT + "                                  Wrong username." + ConsoleColors.RESET);
                 }
             }
 
@@ -529,7 +529,7 @@ public class Bookshop {
                 clearScreen();
                 titlePage();
                 System.out.println();
-                System.out.println(ConsoleColors.RED_BRIGHT + "                                  User doesn't exist" + ConsoleColors.WHITE);
+                System.out.println(ConsoleColors.RED_BRIGHT + "                                  User doesn't exist" + ConsoleColors.RESET);
                 System.out.println();
                 System.out.println("                                try again [a] / exit [e]");
                 System.out.print("                                   ");
@@ -543,7 +543,7 @@ public class Bookshop {
                     QUIT = FAIL;
                     break;
                 } else {
-                    System.out.println(ConsoleColors.RED_BRIGHT + "                                Input must be a or e." + ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.RED_BRIGHT + "                                Input must be a or e." + ConsoleColors.RESET);
                     System.out.println();
                 }
             }
@@ -571,7 +571,7 @@ public class Bookshop {
                     username = name;
                     break;
                 } else {
-                    System.out.println(ConsoleColors.BLUE_BRIGHT + "                        Username has to be at least 4 characters." + ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.BLUE_BRIGHT + "                        Username has to be at least 4 characters." + ConsoleColors.RESET);
                 }
             }
 
@@ -588,7 +588,7 @@ public class Bookshop {
                     email = emailRtr;
                     break;
                 }
-                System.out.println(ConsoleColors.RED_BRIGHT +"                           Email must be the right pattern." + ConsoleColors.WHITE);
+                System.out.println(ConsoleColors.RED_BRIGHT +"                           Email must be the right pattern." + ConsoleColors.RESET);
                 System.out.println();            
             }
 
@@ -597,15 +597,15 @@ public class Bookshop {
             
             for (User userInfo : users) { // checks if user with the same name & email is already being used
                 if (userInfo.getName().equals(user.getName()) && userInfo.getEmail().equals(user.getEmail())) {
-                    System.out.println(ConsoleColors.RED_BRIGHT + "                                  User already exists." + ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.RED_BRIGHT + "                                  User already exists." + ConsoleColors.RESET);
                     userExists = true;
                     break;
                 } else if (userInfo.getEmail().equals(user.getEmail())) { // checks if the email is being used
-                    System.out.println(ConsoleColors.RED_BRIGHT + "                                  Email already in use." + ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.RED_BRIGHT + "                                  Email already in use." + ConsoleColors.RESET);
                     userExists = true;
                     break;
                 } else if (userInfo.getName().equals(user.getName())) {
-                    System.out.println(ConsoleColors.RED_BRIGHT + "                                  Username is taken." + ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.RED_BRIGHT + "                                  Username is taken." + ConsoleColors.RESET);
                     userExists = true;
                     break;
                 }
@@ -641,7 +641,7 @@ public class Bookshop {
                     QUIT = FAIL;
                     break;
                 } else {
-                    System.out.println(ConsoleColors.RED_BRIGHT + "                                Input must be a or e" + ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.RED_BRIGHT + "                                Input must be a or e" + ConsoleColors.RESET);
                     System.out.println();
                 }
             }
@@ -662,6 +662,7 @@ public class Bookshop {
         String yearColor = "";
         String priceColor = "";
 
+        // colors in the last active sorting method within search
         if (start.equals("search")) {
             if (temporarySortMode.equals("5")) {
                 idColor = ConsoleColors.PURPLE;
@@ -674,7 +675,7 @@ public class Bookshop {
             } else if (temporarySortMode.equals("4")) {
                 yearColor = ConsoleColors.PURPLE;
             }
-        } else {
+        } else { // colors in the last active sorting method everywhere else
             if (lastSortMode.equals("5")) {
                 idColor = ConsoleColors.PURPLE;
             } else if (lastSortMode.equals("1")) {
@@ -730,7 +731,7 @@ public class Bookshop {
         System.out.println("                                    |  _  | / _ \\ | | | |/ __| / _ \\" + ConsoleColors.PURPLE);
         System.out.println("                                    | | | || (_) || |_| |\\__ \\|  __/");
         System.out.println("                                    \\_| |_/ \\___/  \\__,_||___/ \\___|");
-        System.out.println(ConsoleColors.WHITE + "");
+        System.out.println(ConsoleColors.RESET + "");
         System.out.println("");
 
 
