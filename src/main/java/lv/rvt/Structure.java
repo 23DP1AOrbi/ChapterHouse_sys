@@ -54,8 +54,8 @@ public class Structure extends Bookshop { // structure for the program
                 } else if (choice.equalsIgnoreCase("n")) {
                     break;
                 } else {
-                    System.out.println("Input must be [" + ConsoleColors.GREEN_BRIGHT  +"y" + ConsoleColors.WHITE + "] / [" 
-                    + ConsoleColors.RED_BRIGHT + "n" + ConsoleColors.WHITE + "].");
+                    System.out.println("Input must be [" + ConsoleColors.GREEN_BRIGHT  +"y" + ConsoleColors.RESET + "] / [" 
+                    + ConsoleColors.RED_BRIGHT + "n" + ConsoleColors.RESET + "].");
                 }
             }
         }
@@ -83,7 +83,7 @@ public class Structure extends Bookshop { // structure for the program
             } else if (input.equalsIgnoreCase("l")) {
                 choiceUserList();
             } else {
-                message = ConsoleColors.RED_BRIGHT + "Invalid input." + ConsoleColors.WHITE;
+                message = ConsoleColors.RED_BRIGHT + "Invalid input." + ConsoleColors.RESET;
             }
         }
     }
@@ -140,7 +140,7 @@ public class Structure extends Bookshop { // structure for the program
         ArrayList<UserBook> books = BookManager.allUserBooks();
         books = BookshopUserList.filterForUserBooks(books, true);
         if (books.size() == 0) {
-            message = ConsoleColors.BLUE_BRIGHT + "Empty reading list." + ConsoleColors.WHITE;
+            message = ConsoleColors.BLUE_BRIGHT + "Empty reading list." + ConsoleColors.RESET;
         }
         while (true) {
             clearScreen();
@@ -151,7 +151,7 @@ public class Structure extends Bookshop { // structure for the program
             books = BookshopUserList.applyLastSortForUser(books);
             books = BookshopUserList.applyLastFilterForUser(books);
             BookshopUserList.tableFormatUser(books, "");
-            if (!message.equals(" ")) {
+            if (!message.equals("")) {
                 System.out.println(message);
             }
 
@@ -170,20 +170,22 @@ public class Structure extends Bookshop { // structure for the program
                 BookshopUserList.filterForUserBooks(books, true);
             } else if (input.equalsIgnoreCase("r")) {
                 if (books.size() == 0) {
-                    message = ConsoleColors.RED_BRIGHT + "Can't remove from an empty list." + ConsoleColors.WHITE;
+                    message = ConsoleColors.RED_BRIGHT + "Can't remove from an empty list." + ConsoleColors.RESET;
                 } else {
                     Structure.removeBook("/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + ".csv", books, "");
+                    message = ConsoleColors.GREEN_BRIGHT + "Book removed successfully." + ConsoleColors.RESET;
                 }
             } else if (input.equalsIgnoreCase("c")) {
                 if (books.size() == 0) {
-                    message =  ConsoleColors.RED_BRIGHT + "Can't edit an empty list." + ConsoleColors.WHITE;
+                    message =  ConsoleColors.RED_BRIGHT + "Can't edit an empty list." + ConsoleColors.RESET;
                 } else {
                  Structure.changeBookReadingStatus("/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + ".csv", books);
+                 message = ConsoleColors.GREEN_BRIGHT + "Book status changed successfully." + ConsoleColors.RESET;
                 }
             } else if (input.equalsIgnoreCase("x")) {
                 break;
             } else {
-                message = ConsoleColors.RED_BRIGHT + "Invalid input." + ConsoleColors.WHITE;
+                message = ConsoleColors.RED_BRIGHT + "Invalid input." + ConsoleColors.RESET;
             }   
             
         }
@@ -201,7 +203,7 @@ public class Structure extends Bookshop { // structure for the program
             String input = scan.nextLine();
 
             if (!input.matches("\\d+")) {
-                System.out.println( ConsoleColors.RED_BRIGHT +"Input has to be a positive integer." + ConsoleColors.WHITE);
+                System.out.println( ConsoleColors.RED_BRIGHT +"Input has to be a positive integer." + ConsoleColors.RESET);
                 continue;
             }
 
@@ -216,7 +218,7 @@ public class Structure extends Bookshop { // structure for the program
             if (MATCH){
                 break;
             } 
-            System.out.println(ConsoleColors.RED_BRIGHT + "Input has to be one of the IDs." + ConsoleColors.WHITE);
+            System.out.println(ConsoleColors.RED_BRIGHT + "Input has to be one of the IDs." + ConsoleColors.RESET);
         }
 
         Book selectedBook = null;
@@ -231,7 +233,7 @@ public class Structure extends Bookshop { // structure for the program
         //Check if book already exists in user's list
         for (Book userBook : userBooks) {
             if (userBook.getName().equals(selectedBook.getName()) && userBook.getAuthor().equals(selectedBook.getAuthor())) {
-                return ConsoleColors.RED_BRIGHT + "List already includes this book." + ConsoleColors.WHITE;
+                return ConsoleColors.RED_BRIGHT + "List already includes this book." + ConsoleColors.RESET;
             }
         }
 
@@ -241,7 +243,7 @@ public class Structure extends Bookshop { // structure for the program
         selectedBook.getYear(), selectedBook.getGenre(), selectedBook.getPrice(), false);
         Bookshop.addBookToUserReadingList(userSelectedBook);
         selectedBook.setId(Integer.valueOf(bookId));
-        return ConsoleColors.GREEN_BRIGHT + "Book added to reading list." + ConsoleColors.WHITE;
+        return ConsoleColors.GREEN_BRIGHT + "Book added to reading list." + ConsoleColors.RESET;
         
     }
 

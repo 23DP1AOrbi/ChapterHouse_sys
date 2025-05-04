@@ -105,7 +105,7 @@ public class Bookshop {
                 if (!message.equals("")) {
                     System.out.println(message);
                 }
-                System.out.println("add [a] / sort [s] / exit [x]");
+                System.out.println("add [a]     /      sort [s]     /     exit [x]");
                 String choice = scan.nextLine();
                 if (choice.equalsIgnoreCase("x")) {
                     break;

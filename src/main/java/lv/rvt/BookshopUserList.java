@@ -272,9 +272,12 @@ public class BookshopUserList extends Bookshop {
                 clearScreen();
                 titlePage();
                 tableFormatUser(searchBook, "search");
+
+                if (!message.equals("")) {
+                    System.out.println(message);
+                }
                 
-                System.out.println(message);
-                System.out.println("remove [r] / sort [s] / change status [c] / exit [x]  ");
+                System.out.println("remove [r]    /    sort [s]    /    change status [c]    /     exit [x]  ");
                 String choice = scan.nextLine();
                 if (choice.equalsIgnoreCase("x")) {
                     message = "";
