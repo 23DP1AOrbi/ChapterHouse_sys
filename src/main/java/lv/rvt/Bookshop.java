@@ -52,7 +52,7 @@ public class Bookshop {
         writer.close();
     }
 
-    public static String search(ArrayList<Book> givenBooks) throws Throwable { // serach for name or author
+    public static String search(ArrayList<Book> givenBooks) throws Throwable { // search for name or author
         Scanner scan = new Scanner(System.in);
         
 
@@ -123,13 +123,11 @@ public class Bookshop {
     }
 
     public static ArrayList<Book> sortAllBooks(ArrayList<Book> unsortedBooks, String search) throws Throwable  { // change in what order everything is displayed
-
         ArrayList<String> sortedList = new ArrayList<>();
-        BufferedReader reader = Helper.getReader("books.csv");
 
         Scanner scan = new Scanner(System.in);
         System.out.println("Sort by");
-        System.out.println("name [1] / author [2] / price [3] / year [4] / id [5]");
+        System.out.println("   name [1]    /    author [2]    /    price [3]    /    year [4]    /    id [5]");
         String input;
         while (true) {
             String enter =  scan.nextLine();
@@ -173,15 +171,17 @@ public class Bookshop {
             }
             else { 
                 System.out.println(ConsoleColors.RED_BRIGHT + "Invalid input." + ConsoleColors.RESET);
-                System.out.println("name [1] / author [2] /price [3] / year [4] / id [5]");
+                System.out.println("   name [1]    /    author [2]    /    price [3]    /    year [4]    /    id [5]");
              }
         }
 
-        String line;
-        reader.readLine();
-        while ((line = reader.readLine()) != null) { //only takes the book name or auhtors and creates an array
-            String[] parts = line.split(",");
-            sortedList.add(parts[Integer.valueOf(input)]); 
+        ArrayList<Book> allBooks = BookManager.allBooks();
+        for (Book book : allBooks) {
+            if (input.equals("1")) {
+                sortedList.add(book.getName());
+            } else if (input.equals("2")) {
+                sortedList.add(book.getAuthor());
+            }
         }
 
         Collections.sort(sortedList); // sorts the array alphabetically of names or authors
@@ -241,14 +241,11 @@ public class Bookshop {
     }
 
     public static ArrayList<Book> sortByPrice(ArrayList<Book> unsortedBooks, String order) throws Exception { //similar to sortAllBooks but does it by price instead
-        BufferedReader reader = Helper.getReader("books.csv");
         ArrayList<Double> sortedList = new ArrayList<>();
 
-        String line;
-        reader.readLine();
-        while ((line = reader.readLine()) != null) { //only takes the price
-            String[] parts = line.split(",");
-            sortedList.add(Double.valueOf(parts[5])); 
+        ArrayList<Book> allBooks = BookManager.allBooks();
+        for (Book bookPrice : allBooks) {
+            sortedList.add(bookPrice.getPrice());
         }
 
         Collections.sort(sortedList); // Sorts by hihghest number
@@ -270,14 +267,11 @@ public class Bookshop {
     }
 
     public static ArrayList<Book> sortByYear(ArrayList<Book> unsortedBooks, String order) throws Throwable {
-        BufferedReader reader = Helper.getReader("books.csv");
         ArrayList<Integer> sortedList = new ArrayList<>();
 
-        String line;
-        reader.readLine();
-        while ((line = reader.readLine()) != null) { //only takes the year
-            String[] parts = line.split(",");
-            sortedList.add(Integer.valueOf(parts[3])); 
+        ArrayList<Book> allBooks = BookManager.allBooks();
+        for (Book bookYear : allBooks) {
+            sortedList.add(bookYear.getYear());
         }
 
         Collections.sort(sortedList); // Sorts by hihghest number
@@ -366,7 +360,7 @@ public class Bookshop {
 
             String input;
             while (true) {
-                System.out.println("Add [a] / add all [l] / remove [r] / exit [x]");
+                System.out.println("   Add [a]    /     add all [l]    /    remove [r]     /     exit [x]");
 
                 String enter = scan.nextLine();
                 if (enter.equalsIgnoreCase("x")) {
@@ -385,7 +379,8 @@ public class Bookshop {
                     input = enter;
 
                 while (true) {
-                    System.out.println("Fantasy [f] / romance [r] / dystopian [d] / Modern Fiction [m] / Historical [h] / Non-Fiction [n] / exit [x]");
+                    System.out.println("   Fantasy [f]    /    romance [r]    /     dystopian [d]    /     Modern Fiction [m] ");
+                    System.out.println("                Historical [h]       /     Non-Fiction [n]  /    exit [x]");
                     String userGenre = scan.nextLine();
 
                     if (userGenre.equalsIgnoreCase("x")) {

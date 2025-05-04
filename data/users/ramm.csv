@@ -1,10 +1,12 @@
 Id,Name,Author,Year,Genre,Price (EUR),Finished reading
 1,To Kill a Mockingbird,Harper Lee,1960,Historical,11.15,false
-2,The Help,Kathryn Stockett,2009,Historical,10.85,false
-3,1984,George Orwell,1949,Dystopian,9.49,true
-4,Little Fires Everywhere,Celeste Ng,2017,Modern Fiction,11.39,true
-5,Outliers,Malcolm Gladwell,2008,Non-Fiction,12.69,true
-6,Educated,Tara Westover,2018,Non-Fiction,14.55,false
-7,The Lord of the Rings,J.R.R. Tolkien,1954,Fantasy,22.55,false
-8,The Notebook,Nicholas Sparks,1996,Romance,9.25,false
-9,Eleanor Oliphant Is Completely Fine,Gail Honeyman,2017,Modern Fiction,11.75,false
+2,1984,George Orwell,1949,Dystopian,9.49,true
+3,Educated,Tara Westover,2018,Non-Fiction,14.55,true
+4,The Lord of the Rings,J.R.R. Tolkien,1954,Fantasy,22.55,false
+5,The Notebook,Nicholas Sparks,1996,Romance,9.25,false
+6,Eleanor Oliphant Is Completely Fine,Gail Honeyman,2017,Modern Fiction,11.75,true
+7,The Cold War,John Lewis Gaddis,2005,Non-Fiction,10.95,false
+8,Fahrenheit 451,Ray Bradbury,1953,Dystopian,10.19,false
+9,Children of Blood and Bone,Tomi Adeyemi,2018,Fantasy,11.25,true
+10,An Ember in the Ashes,Sabaa Tahir,2015,Fantasy,10.85,true
+11,The Fault in Our Stars,John Green,2012,Romance,9.75,false

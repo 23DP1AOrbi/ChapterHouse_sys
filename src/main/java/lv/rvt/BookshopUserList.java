@@ -25,14 +25,12 @@ public class BookshopUserList extends Bookshop {
 
     public static ArrayList<UserBook> sortAllUserBooks(ArrayList<UserBook> unsortedBooks, String search) { // change in what order everything is displayed
 
-        BufferedReader reader;
         try {
-            reader = Helper.getReader("users/" + User.getCurrentUser() + ".csv");
             ArrayList<String> sortedList = new ArrayList<>();
             Scanner scan = new Scanner(System.in);
 
             System.out.println("Sort by");
-            System.out.println("name [1] / author [2] / price [3] / year [4] / id [5]");
+            System.out.println("  name [1]    /    author [2]    /    price [3]    /    year [4]    /    id [5]");
             String input;
             while (true) {
                 String enter =  scan.nextLine();
@@ -76,39 +74,42 @@ public class BookshopUserList extends Bookshop {
                 }
                 else { 
                     System.out.println(ConsoleColors.RED_BRIGHT + "Invalid input." + ConsoleColors.RESET);
-                    System.out.println("name [1] / author [2] /price [3] / year [4] / id [5]");
+                    System.out.println("  name [1]    /    author [2]    /    price [3]    /    year [4]    /    id [5]");
                 }
             }
 
-        String line;
-        reader.readLine();
-        while ((line = reader.readLine()) != null) { //only takes the book name or auhtors and creates an array
-            String[] parts = line.split(",");
-            sortedList.add(parts[Integer.valueOf(input)]); 
-        }
-
-        Collections.sort(sortedList); // sorts the array alphabetically of names or authors
-        ArrayList<UserBook> bookList = new ArrayList<>();
-        for (String sortedItem : sortedList) {
-            for (UserBook book : unsortedBooks) {
-                if (book.getName().equals(sortedItem) || book.getAuthor().equals(sortedItem)) {
-                    // Add the book to the bookList if it matches either name or author
-                    bookList.add(book);
+            ArrayList<UserBook> allBooks = BookManager.allUserBooks();
+            for (UserBook book : allBooks) {
+                if (input.equals("1")) {
+                    sortedList.add(book.getName());
+                } else if (input.equals("2")) {
+                    sortedList.add(book.getAuthor());
                 }
             }
-        }
 
-        String order = sortDirection("text");
-        temporarySortDirection = order;
-        // if used in search the order doesnt get saved outside it
-        if (!(search.equals("search"))) {
-            lastSortDirection = order;
-        }
-        
-        if (order.equalsIgnoreCase("d")) { // returns the same list reversed
-            Collections.reverse(bookList);
-        }
-        return bookList;
+
+            Collections.sort(sortedList); // sorts the array alphabetically of names or authors
+            ArrayList<UserBook> bookList = new ArrayList<>();
+            for (String sortedItem : sortedList) {
+                for (UserBook book : unsortedBooks) {
+                    if (book.getName().equals(sortedItem) || book.getAuthor().equals(sortedItem)) {
+                        // Add the book to the bookList if it matches either name or author
+                        bookList.add(book);
+                    }
+                }
+            }
+
+            String order = sortDirection("text");
+            temporarySortDirection = order;
+            // if used in search the order doesnt get saved outside it
+            if (!(search.equals("search"))) {
+                lastSortDirection = order;
+            }
+            
+            if (order.equalsIgnoreCase("d")) { // returns the same list reversed
+                Collections.reverse(bookList);
+            }
+            return bookList;
         } catch (Throwable e) {
             e.printStackTrace();
         }   return unsortedBooks;
@@ -170,15 +171,11 @@ public class BookshopUserList extends Bookshop {
     }
 
     public static ArrayList<UserBook> sortByPriceForUser(ArrayList<UserBook> unsortedBooks, String order) throws Exception { //similar to sortAllBooks but does it by price instead
-
-        BufferedReader reader = Helper.getReader("users/" + User.getCurrentUser() + ".csv");
         ArrayList<Double> sortedList = new ArrayList<>();
 
-        String line;
-        reader.readLine();
-        while ((line = reader.readLine()) != null) { //only takes the price
-            String[] parts = line.split(",");
-            sortedList.add(Double.valueOf(parts[5])); 
+        ArrayList<UserBook> allBooks = BookManager.allUserBooks();
+        for (UserBook bookPrice : allBooks) {
+            sortedList.add(bookPrice.getPrice());
         }
 
         Collections.sort(sortedList); // Sorts by hihghest number
@@ -201,14 +198,11 @@ public class BookshopUserList extends Bookshop {
     }
 
     public static ArrayList<UserBook> sortByYearForUser(ArrayList<UserBook> unsortedBooks, String order) throws Throwable {
-        BufferedReader reader  = Helper.getReader("users/" + User.getCurrentUser() + ".csv");;
         ArrayList<Integer> sortedList = new ArrayList<>();
 
-        String line;
-        reader.readLine();
-        while ((line = reader.readLine()) != null) { //only takes the year
-            String[] parts = line.split(",");
-            sortedList.add(Integer.valueOf(parts[3])); 
+        ArrayList<UserBook> allBooks = BookManager.allUserBooks();
+        for (UserBook bookYear : allBooks) {
+            sortedList.add(bookYear.getYear());
         }
 
         Collections.sort(sortedList); // Sorts by hihghest number
@@ -286,7 +280,7 @@ public class BookshopUserList extends Bookshop {
                     message = "";
                     break;
                 } else if (choice.equalsIgnoreCase("r")) {
-                    searchBook = Structure.removeBook("/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + ".csv", searchBook, "search");
+                    searchBook = Structure.removeBook("/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + ".csv", searchBook, "search");
                     givenBooks = searchBook;
                     if (searchBook.size() == 0) {
                         return ConsoleColors.GREEN_BRIGHT + "Book removed." + ConsoleColors.WHITE;
@@ -294,7 +288,7 @@ public class BookshopUserList extends Bookshop {
                 } else if (choice.equalsIgnoreCase("s")) {
                     searchBook = BookshopUserList.sortAllUserBooks(searchBook, "search");
                 } else if (choice.equalsIgnoreCase("c")) {
-                    searchBook = Structure.changeBookReadingStatus("/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + ".csv", searchBook);
+                    searchBook = Structure.changeBookReadingStatus("/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + ".csv", searchBook);
                 } else {
                     message = ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.WHITE;
                 }
@@ -345,7 +339,7 @@ public class BookshopUserList extends Bookshop {
 
         while (true) {
             System.out.println("Filter by");
-            System.out.println("Genre [g] / status [s] / exit [x]");
+            System.out.println("  Genre [g]     /     status [s]     /     exit [x]");
 
             String enter = scan.nextLine();
             if (enter.equalsIgnoreCase("x")) {
@@ -356,7 +350,7 @@ public class BookshopUserList extends Bookshop {
             } else if (enter.equalsIgnoreCase("s")) {
                 while (true) {
                     GENREFILTER = false;
-                    System.out.println("finished [f] / not finished [n] / all [a] / exit [x]");
+                    System.out.println("   finished [f]   /   not finished [n]   /   all [a]   /   exit [x]");
                     input = scan.nextLine();
 
                     if (input.equalsIgnoreCase("x")) {
@@ -410,7 +404,7 @@ public class BookshopUserList extends Bookshop {
         }
             
             while (GENREFILTER) {
-                System.out.println("Add [a] / add all [l] / remove [r] / exit [x]");
+                System.out.println("   Add [a]    /     add all [l]    /    remove [r]     /     exit [x]");
 
                 String enter = scan.nextLine();
                 if (enter.equalsIgnoreCase("x")) {
@@ -443,7 +437,8 @@ public class BookshopUserList extends Bookshop {
                     input = enter;
 
                 while (true) {
-                    System.out.println("Fantasy [f] / romance [r] / dystopian [d] / Modern Fiction [m] / Historical [h] / Non-Fiction [n] / exit [x]");
+                    System.out.println("   Fantasy [f]    /    romance [r]    /     dystopian [d]    /     Modern Fiction [m] ");
+                    System.out.println("                Historical [h]       /     Non-Fiction [n]  /    exit [x]");
                     String userGenre = scan.nextLine();
 
                     if (userGenre.equalsIgnoreCase("x")) {
