@@ -454,7 +454,7 @@ public class Bookshop {
     public static boolean entry() throws Exception {
         Scanner scan = new Scanner(System.in);
         
-        while (true) {
+        while (true) { 
             clearScreen();
             titlePage();
             
