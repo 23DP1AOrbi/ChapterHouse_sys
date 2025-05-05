@@ -283,7 +283,7 @@ public class BookshopUserList extends Bookshop {
                     message = "";
                     break;
                 } else if (choice.equalsIgnoreCase("r")) {
-                    searchBook = Structure.removeBook("/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + ".csv", searchBook, "search");
+                    searchBook = Structure.removeBook("data/users/" + User.getCurrentUser() + ".csv", searchBook, "search");
                     givenBooks = searchBook;
                     if (searchBook.size() == 0) {
                         return ConsoleColors.GREEN_BRIGHT + "Book removed." + ConsoleColors.RESET;
@@ -291,7 +291,7 @@ public class BookshopUserList extends Bookshop {
                 } else if (choice.equalsIgnoreCase("s")) {
                     searchBook = BookshopUserList.sortAllUserBooks(searchBook, "search");
                 } else if (choice.equalsIgnoreCase("c")) {
-                    searchBook = Structure.changeBookReadingStatus("/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + ".csv", searchBook);
+                    searchBook = Structure.changeBookReadingStatus("data/users/" + User.getCurrentUser() + ".csv", searchBook);
                 } else {
                     message = ConsoleColors.RED_BRIGHT +  "Invalid input." + ConsoleColors.RESET;
                 }

@@ -171,14 +171,14 @@ public class Structure extends Bookshop { // structure for the program
                 if (books.size() == 0) {
                     message = ConsoleColors.RED_BRIGHT + "Can't remove from an empty list." + ConsoleColors.RESET;
                 } else {
-                    Structure.removeBook("/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + ".csv", books, "");
+                    Structure.removeBook("data/users/" + User.getCurrentUser() + ".csv", books, "");
                     message = ConsoleColors.GREEN_BRIGHT + "Book removed successfully." + ConsoleColors.RESET;
                 }
             } else if (input.equalsIgnoreCase("c")) {
                 if (books.size() == 0) {
                     message =  ConsoleColors.RED_BRIGHT + "Can't edit an empty list." + ConsoleColors.RESET;
                 } else {
-                 Structure.changeBookReadingStatus("/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + ".csv", books);
+                 Structure.changeBookReadingStatus("data/users/" + User.getCurrentUser() + ".csv", books);
                  message = ConsoleColors.GREEN_BRIGHT + "Book status changed successfully." + ConsoleColors.RESET;
                 }
             } else if (input.equalsIgnoreCase("x")) {
@@ -247,7 +247,7 @@ public class Structure extends Bookshop { // structure for the program
     }
 
     public static ArrayList<UserBook> removeBook(String filePath, ArrayList<UserBook> givenBooks, String start) throws Exception {
-        String tempFile = "/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + "Temp.csv";
+        String tempFile = "data/users/" + User.getCurrentUser() + "Temp.csv";
         File oldReadingList = new File(filePath);
         File newReadingList = new File(tempFile);
         
@@ -323,7 +323,7 @@ public class Structure extends Bookshop { // structure for the program
     }
 
     public static ArrayList<UserBook> changeBookReadingStatus(String filePath, ArrayList<UserBook> givenBooks) {
-        String tempFile = "/workspaces/Eksamens_praktiskais/data/users/" + User.getCurrentUser() + "Temp.csv";
+        String tempFile = "data/users/" + User.getCurrentUser() + "Temp.csv";
         File oldReadingList = new File(filePath);
         File newReadingList = new File(tempFile);
         

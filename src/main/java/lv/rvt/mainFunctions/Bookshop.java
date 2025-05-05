@@ -617,7 +617,7 @@ public class Bookshop {
                 System.out.println("New user added");
 
                 // make new file to store added books
-                File file = new File("/workspaces/Eksamens_praktiskais/data/users/"+ user.getName() +".csv");
+                File file = new File("data/users/"+ user.getName() +".csv");
                 file.createNewFile(); 
 
                 BufferedWriter writer = Helper.getWriter("users/" + user.getName()+".csv", StandardOpenOption.APPEND);
