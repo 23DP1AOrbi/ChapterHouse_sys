@@ -595,13 +595,13 @@ public class BookshopUserList extends Bookshop {
         System.out.printf("%22s", "Romance [" + romanceStatus + "]");
         System.out.printf("%22s", " Dystopian [" + dystopianStatus + "]");
         System.out.printf("%15s", "A-Z [" + alphabet + "]");
-        System.out.printf("%10s", "↑ [" + ascending + "]");
+        System.out.printf("%10s", "Asc [" + ascending + "]");
         System.out.printf("%12s\n", "|");
         System.out.printf("| %22s", "Modern Fiction [" + modernStatus + "]");
         System.out.printf("%22s", "Historical [" + historicalStatus + "]");
         System.out.printf("%22s", "Non-Fiction [" + nonfictionStatus + "]");
         System.out.printf("%15s", "Z-A [" + alphReverse + "]");
-        System.out.printf("%10s", "↓ [" + descending + "]");
+        System.out.printf("%10s", "Dsc [" + descending + "]");
         System.out.printf("%12s\n", "|");
         System.out.println("---------------------------------------------------------------------------------------------------------");
         System.out.println("=========================================================================================================");

@@ -323,11 +323,10 @@ public class Bookshop {
             System.out.println("A -> [A-Z]");
             System.out.println("D -> [Z-A]");
         } else {
-            System.out.println("A - ↑");
-            System.out.println("D - ↓");
+            System.out.println("A - ↑ [ascending]");
+            System.out.println("D - ↓ [descending]");
         }
 
-        System.out.println("Ascending  [a] / descending [d]");
         while (true) { // Checks if input is a/A or d/D
             String enter =  scan.nextLine();
             if (enter.equalsIgnoreCase("a") || enter.equalsIgnoreCase("d")) {
@@ -815,13 +814,13 @@ public class Bookshop {
         System.out.printf("%22s", "Romance [" + romanceStatus + "]");
         System.out.printf("%22s", " Dystopian [" + dystopianStatus + "]");
         System.out.printf("%15s", "A-Z [" + alphabet + "]");
-        System.out.printf("%10s", "↑ [" + ascending + "]");
+        System.out.printf("%10s", "Asc [" + ascending + "]");
         System.out.printf("%5s\n", "|");
         System.out.printf("| %22s", "Modern Fiction [" + modernStatus + "]");
         System.out.printf("%22s", "Historical [" + historicalStatus + "]");
         System.out.printf("%22s", "Non-Fiction [" + nonfictionStatus + "]");
         System.out.printf("%15s", "Z-A [" + alphReverse + "]");
-        System.out.printf("%10s", "↓ [" + descending + "]");
+        System.out.printf("%10s", "Dsc [" + descending + "]");
         System.out.printf("%5s\n", "|");
         System.out.println("--------------------------------------------------------------------------------------------------");
         System.out.println("==================================================================================================");
